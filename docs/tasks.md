@@ -6,14 +6,14 @@ Track all implementation tasks with their completion status.
 
 - [x] Data model: add `frame { x, y, width, height }` and `zIndex`
 - [x] Store: selection state and `interactionMode`
-- [ ] Pointer input layer: `pointerdown/move/up/cancel` with capture
-- [ ] Hit-testing: topmost block by `zIndex` and frame
+- [x] Pointer input layer: `pointerdown/move/up/cancel` with capture
+- [x] Hit-testing: topmost block by `zIndex` and frame
 - [ ] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
 - [ ] Marquee selection (rubber-band) on empty canvas drag
 - [ ] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay toggle, selection rect and handles
-- [ ] Undo/redo: coalesce during interaction, commit on end
+- [x] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases: high-DPI scaling, iframes overlay, 200+ blocks perf
 
 ### M1.1 — Data model
@@ -21,9 +21,10 @@ Track all implementation tasks with their completion status.
 - [x] Extend block base type with `frame: Frame` and `zIndex: number`
 - [x] Provide defaults for blocks in `@site-builder/blocks` (sensible initial sizes)
 - [x] Update editor store state to include `selectedBlockIds`, `hoveredBlockId`, `interactionMode`
-- [ ] Add selectors: `getBlockById`, `getTopmostAtPoint`, `getBlocksInRect`
+- [ ] Add selectors: `getBlockById`
+- [x] Add selectors: `getTopmostAtPoint`, `getBlocksInRect`
 - [ ] Add util helpers: `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
-- [ ] Ensure Immer-based immutable updates for move/resize primitives
+- [x] Ensure Immer-based immutable updates for move/resize primitives
 - [ ] Backfill existing pages/seed to include `frame` and `zIndex`
 - [x] Smoke test: render frames in canvas positioning (no interactions yet)
 

@@ -33,10 +33,71 @@ function renderBlock(block: any) {
     style: block.style
   } as any)
 }
+
+function onPointerDown(e: PointerEvent) {
+  const root = (e.currentTarget as HTMLElement)
+  const rect = root.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  const hit = (editor as any).getTopmostAtPoint(x, y)
+  console.log('[canvas] pointerdown', { x, y, hitId: hit?.id, shiftKey: e.shiftKey })
+  if (hit && hit.id) {
+    editor.selectBlock(hit.id, e.shiftKey)
+    console.log('[canvas] select', editor.selectedBlockIds)
+    try {
+      root.setPointerCapture(e.pointerId)
+    } catch {}
+    editor.setInteractionMode('drag')
+    ;(editor as any)._drag = {
+      pointerId: e.pointerId,
+      start: { x, y },
+      initialFrames: editor.selectedBlockIds.map((id: string) => {
+        const b = editor.tree.body.find((bb: any) => bb.id === id)
+        return { id, frame: b?.frame ? { ...b.frame } : null }
+      })
+    }
+    console.log('[canvas] drag:start', (editor as any)._drag)
+  } else {
+    editor.clearSelection()
+    console.log('[canvas] clearSelection')
+  }
+}
+
+function onPointerMove(e: PointerEvent) {
+  if (editor.interactionMode === 'drag') {
+    const root = (e.currentTarget as HTMLElement)
+    const rect = root.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const drag = (editor as any)._drag
+    if (!drag) return
+    const dx = x - drag.start.x
+    const dy = y - drag.start.y
+    // Apply absolute positions based on initial frames to avoid compounding
+    const updates = drag.initialFrames
+      .filter((f: any) => f.frame)
+      .map((f: any) => ({ id: f.id, x: f.frame.x + dx, y: f.frame.y + dy }))
+    editor.setFramesAbsolute(updates)
+  }
+}
+function onPointerUp(e: PointerEvent) {
+  console.log('[canvas] pointerup', { mode: editor.interactionMode, pointerId: e.pointerId })
+  const root = (e.currentTarget as HTMLElement)
+  try {
+    root.releasePointerCapture(e.pointerId)
+  } catch {}
+  const wasDragging = editor.interactionMode === 'drag'
+  ;(editor as any)._drag = undefined
+  editor.setInteractionMode('idle')
+  if (wasDragging) {
+    editor.addToHistory()
+    console.log('[canvas] drag:commit')
+  }
+}
 </script>
 
 <template>
-  <div class="relative" style="min-height: 600px;">
+  <div class="relative" style="min-height: 600px;" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
     <div
       v-for="block in tree.body"
       :key="block.id"

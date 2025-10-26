@@ -109,12 +109,58 @@ export const useEditorStore = defineStore('editor', {
 
     setBreakpoint(breakpoint: 'lg' | 'md' | 'sm') {
       this.breakpoint = breakpoint
+    },
+
+    applyFrameDeltas(deltas: Array<{ id: string, dx: number, dy: number }>) {
+      // Apply deltas to frames without touching history
+      this.tree = produce(this.tree, (draft => {
+        for (const { id, dx, dy } of deltas) {
+          const b = (draft.body as any[]).find(bb => bb.id === id)
+          if (b && b.frame) {
+            b.frame.x += dx
+            b.frame.y += dy
+          }
+        }
+      }))
+    },
+
+    setFramesAbsolute(updates: Array<{ id: string, x: number, y: number }>) {
+      // Set absolute frame positions (used during drag based on initial frames)
+      this.tree = produce(this.tree, (draft => {
+        for (const { id, x, y } of updates) {
+          const b = (draft.body as any[]).find(bb => bb.id === id)
+          if (b && b.frame) {
+            b.frame.x = x
+            b.frame.y = y
+          }
+        }
+      }))
     }
   },
 
   getters: {
     canUndo: (state) => state.historyIndex > 0,
-    canRedo: (state) => state.historyIndex < state.history.length - 1
+    canRedo: (state) => state.historyIndex < state.history.length - 1,
+    getTopmostAtPoint: (state) => (x: number, y: number) => {
+      const hits = state.tree.body.filter((b: any) => {
+        const f = (b as any).frame
+        if (!f) return false
+        return x >= f.x && x <= f.x + f.width && y >= f.y && y <= f.y + f.height
+      }) as any[]
+      return hits.sort((a, b) => (a.zIndex ?? 0) - (b.zIndex ?? 0)).pop() || null
+    },
+    getBlocksInRect: (state) => (rx: number, ry: number, rw: number, rh: number) => {
+      const r2x = rx + rw
+      const r2y = ry + rh
+      return state.tree.body.filter((b: any) => {
+        const f = (b as any).frame
+        if (!f) return false
+        const b2x = f.x + f.width
+        const b2y = f.y + f.height
+        const intersects = !(b2x < rx || f.x > r2x || b2y < ry || f.y > r2y)
+        return intersects
+      }) as any[]
+    }
   }
 })
 
