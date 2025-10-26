@@ -332,9 +332,11 @@ function onKeyUp(e: KeyboardEvent) {
         }"
         @mouseenter="() => editor.setHovered(block.id)"
         @mouseleave="() => editor.setHovered(null)"
-        @click.stop="(e) => selectWithRules(block.id, e.shiftKey)"
+        @click.stop.prevent="(e) => selectWithRules(block.id, e.shiftKey)"
       >
-        <component :is="() => renderBlock(block)" />
+        <div class="pointer-events-none select-none">
+          <component :is="() => renderBlock(block)" />
+        </div>
         <template v-if="editor.selectedBlockIds.length === 1 && editor.selectedBlockIds[0] === block.id">
           <!-- resize handles -->
           <div class="absolute inset-0 pointer-events-none">

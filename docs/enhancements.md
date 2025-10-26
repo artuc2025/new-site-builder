@@ -54,6 +54,11 @@ This document captures follow-up improvements after each implementation. Focus a
 - Refactored drag/resize code paths in `CanvasComponent.vue` to use it.
  - Added Delete/Esc keyboard handling; consider debounced delete confirmation for multi-select to avoid accidental removal.
 
+11) Focus & Pointer Interop in Editor
+- Wrapped rendered block content with `pointer-events: none` and `select-none` in the editor canvas to prevent inner links/controls (e.g., Hero CTA) from stealing focus.
+- Used `@click.prevent` on selection wrapper to avoid navigation in edit mode.
+- Future: provide an explicit Preview mode to re-enable pointer events and actual link navigation.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.
