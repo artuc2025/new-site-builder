@@ -220,8 +220,8 @@ function onPointerMove(e: PointerEvent) {
     // clamp to canvas bounds on right/bottom
     const maxX = Math.max(0, rect.width - bw)
     const maxY = Math.max(0, rect.height - bh)
-    bx = Math.min(Math.max(0, bx), maxX)
-    by = Math.min(Math.max(0, by), maxY)
+    bx = clampToCanvas(bx, 0, maxX)
+    by = clampToCanvas(by, 0, maxY)
     // apply immutably via store
     editor.setFrameRect(rz.blockId, { x: bx, y: by, width: bw, height: bh })
   }
@@ -289,9 +289,9 @@ function onKeyDown(e: KeyboardEvent) {
     if (rect && b?.frame) {
       const maxX = Math.max(0, rect.width - b.frame.width)
       const maxY = Math.max(0, rect.height - b.frame.height)
-      return { id, x: Math.min(Math.max(0, bx), maxX), y: Math.min(Math.max(0, by), maxY) }
+      return { id, x: clampToCanvas(bx, 0, maxX), y: clampToCanvas(by, 0, maxY) }
     }
-    return { id, x: Math.max(0, bx), y: Math.max(0, by) }
+    return { id, x: clampToCanvas(bx, 0, Number.MAX_SAFE_INTEGER), y: clampToCanvas(by, 0, Number.MAX_SAFE_INTEGER) }
   })
   editor.setFramesAbsolute(updates)
 

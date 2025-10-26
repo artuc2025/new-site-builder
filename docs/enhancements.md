@@ -61,7 +61,7 @@ This document captures follow-up improvements after each implementation. Focus a
 
 12) Geometry Helper Adoption
 - Added `clampToCanvas(value, min, max)` and refactored drag clamping to use it.
-- Next: reuse in resize and keyboard nudge paths for consistency.
+- Completed: reused in resize and keyboard nudge paths for consistency.
 
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
