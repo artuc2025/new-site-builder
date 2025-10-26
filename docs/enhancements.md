@@ -1,0 +1,57 @@
+# Enhancements and Optimization Proposals
+
+This document captures follow-up improvements after each implementation. Focus areas: performance, UX polish, code quality, maintainability.
+
+## M1 — Drag & Drop Canvas
+
+### Current Choices
+- Native Pointer Events; no external DnD libs
+- Store-driven source of truth (Pinia)
+- History commits on interaction end; live updates during move/resize
+- 8px snapping; bounds clamp; min-size 32px
+
+### Proposed Improvements
+1) Ephemeral Preview Layer (recommended)
+- Do not mutate store during move/resize. Keep `previewRect(s)` locally (component or composable) and render via inline style or CSS transform.
+- Commit a single change to the store on pointerup. Pros: fewer writes, simpler undo, avoids proxy conflicts, smoother FPS.
+
+2) Pure Geometry Helpers
+- Add utils:
+  - `snap(value, grid)` / `snapPoint(x, y, grid)`
+  - `clampRect(rect, bounds)`
+  - `resizeByHandle(baseRect, dir, dx, dy, minSize)`
+  - `applyDelta(baseRect, dx, dy)`
+- Unit-test helpers (min size, bounds, negative deltas).
+
+3) rAF Throttling
+- Throttle pointermove with `requestAnimationFrame`.
+- Keep last event and apply per frame to reduce layout work.
+
+4) Zoom and Scroll Awareness
+- Track canvas scale/scroll; transform pointer coords accordingly.
+- Snap in consistent space (world/grid).
+
+5) Group Resize (future)
+- Compute group bbox and scale children; enforce per-child min-size.
+
+6) Re-enable Immer Auto-Freeze
+- After ephemeral preview, restore `setAutoFreeze(true)` for safer immutable updates in store.
+
+7) Code Organization
+- Extract interactions into a composable (e.g. `useCanvasInteractions.ts`).
+- Split overlays into components: `SelectionOverlay.vue`, `ResizeHandles.vue`.
+
+8) Testing
+- Unit tests for geometry helpers.
+- Playwright e2e: select, drag, resize, marquee, keyboard nudge.
+
+### Migration Plan (small steps)
+- Step 1: Introduce pure helpers and switch callers.
+- Step 2: Drag preview state + commit on release.
+- Step 3: Resize preview state + commit; re-enable Immer auto-freeze.
+- Step 4: rAF throttling.
+- Step 5: Zoom/scroll support.
+
+---
+
+Add future entries here for subsequent milestones (M2, M3, ...).

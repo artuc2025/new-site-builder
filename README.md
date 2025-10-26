@@ -125,6 +125,10 @@ npm run dev:runtime  # Start runtime only
 - [ ] Tasks for M1 — see [docs/tasks.md#-m1--drag--drop-canvas](docs/tasks.md#-m1--drag--drop-canvas)
 - [ ] Status tracker — see [docs/status.md#-m1--drag--drop-canvas](docs/status.md#-m1--drag--drop-canvas)
 
+### Contribution Rule: Document Enhancements
+- After each implementation, record optimization ideas and “better variants” in `docs/enhancements.md`.
+- Focus on: reducing component size/complexity, avoiding duplication, performance (rAF, preview state), and maintainability (pure helpers/composables).
+
 ### Troubleshooting
 
 - Windows: If you see a casing error like
