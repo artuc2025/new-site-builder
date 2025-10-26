@@ -3,7 +3,7 @@ import type { PageTree } from '@site-builder/types'
 import { useEditorStore } from '~/stores/editor'
 import { Hero, Text, Image, Button, Gallery, Section } from '@site-builder/blocks'
 import { h, ref } from 'vue'
-import { snapToGrid } from '~/composables/geometry'
+import { snapToGrid, clampToCanvas } from '~/composables/geometry'
 
 export interface Props {
   tree: PageTree
@@ -169,8 +169,8 @@ function onPointerMove(e: PointerEvent) {
         const maxY = Math.max(0, rect.height - f.frame.height)
         return {
           id: f.id,
-          x: Math.min(Math.max(0, nx), maxX),
-          y: Math.min(Math.max(0, ny), maxY)
+          x: clampToCanvas(nx, 0, maxX),
+          y: clampToCanvas(ny, 0, maxY)
         }
       })
     editor.setFramesAbsolute(updates)

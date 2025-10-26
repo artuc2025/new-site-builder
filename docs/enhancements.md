@@ -59,6 +59,10 @@ This document captures follow-up improvements after each implementation. Focus a
 - Used `@click.prevent` on selection wrapper to avoid navigation in edit mode.
 - Future: provide an explicit Preview mode to re-enable pointer events and actual link navigation.
 
+12) Geometry Helper Adoption
+- Added `clampToCanvas(value, min, max)` and refactored drag clamping to use it.
+- Next: reuse in resize and keyboard nudge paths for consistency.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.
