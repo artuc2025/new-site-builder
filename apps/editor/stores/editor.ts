@@ -59,6 +59,8 @@ export const useEditorStore = defineStore('editor', {
       if (!config) return
 
       const nextZ = this.tree.body.length
+        ? Math.max(...(this.tree.body as any[]).map(b => (b as any).zIndex ?? 0)) + 1
+        : 0
       const defaultFrame: Frame = (config as any).defaultFrame || { x: 40, y: 40, width: 320, height: 180 }
 
       const block: PageTreeBlock = {
@@ -73,7 +75,8 @@ export const useEditorStore = defineStore('editor', {
       this.tree = produce(this.tree, (draft) => {
         draft.body.push(block)
       })
-
+      // Auto-select newly added block and bring to front via zIndex
+      this.selectBlock(block.id, false)
       this.addToHistory()
     },
 

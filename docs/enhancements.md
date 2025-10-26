@@ -72,6 +72,9 @@ This document captures follow-up improvements after each implementation. Focus a
 - Handles: 6px size, hover scale, slightly stronger border on hover; positioned with half-size offsets to sit flush at edges.
 - Future: show handles only on hover when selected, and keyboard-focus outline for accessibility.
 
+15) Add Flow UX
+- New blocks are auto-selected and assigned topmost `zIndex` (max+1) to ensure visibility and immediate editability.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.
