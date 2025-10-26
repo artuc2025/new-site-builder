@@ -10,7 +10,7 @@ Track all implementation tasks with their completion status.
 - [x] Hit-testing: topmost block by `zIndex` and frame
 - [x] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
-- [ ] Marquee selection (rubber-band) on empty canvas drag
+- [x] Marquee selection (rubber-band) on empty canvas drag
 - [ ] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay toggle, selection rect and handles
 - [x] Undo/redo: coalesce during interaction, commit on end
