@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "moduleResolution": "bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": false,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],
+      "@site-builder/types": ["../../packages/types/src"],
+      "@site-builder/blocks": ["../../packages/blocks/src"],
+      "@site-builder/ui": ["../../packages/ui/src"],
+      "@site-builder/schemas": ["../../packages/schemas/src"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.vue", "**/*.tsx"],
+  "exclude": ["node_modules", ".nuxt", ".output"]
+}
+

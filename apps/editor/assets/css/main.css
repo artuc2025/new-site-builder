@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Editor Canvas Grid */
+.editor-canvas {
+  background-image: linear-gradient(to right, #e5e7eb 1px, transparent 1px),
+                    linear-gradient(to bottom, #e5e7eb 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Snap Grid */
+.snap-grid {
+  background-image: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent calc(var(--grid-size, 8px) - 1px),
+    rgba(59, 130, 246, 0.3) calc(var(--grid-size, 8px) - 1px),
+    rgba(59, 130, 246, 0.3) var(--grid-size, 8px)
+  );
+}
+
