@@ -181,7 +181,7 @@ function onPointerMove(e: PointerEvent) {
     dx = snapToGrid(dx, grid)
     dy = snapToGrid(dy, grid)
     // Apply absolute positions based on initial frames to avoid compounding
-    const updates = drag.initialFrames
+    let updates = drag.initialFrames
       .filter((f: any) => f.frame)
       .map((f: any) => {
         const nx = f.frame.x + dx
@@ -240,6 +240,74 @@ function onPointerMove(e: PointerEvent) {
     // de-duplicate
     guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
     guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
+
+    // Magnetic snapping to closest guide (within threshold)
+    const threshold = 5
+    let snapDx = 0
+    let snapDy = 0
+    if (others.length) {
+      // compute best X snap (match left/right/center to other's left/right/center)
+      let bestXDist = Number.POSITIVE_INFINITY
+      let bestXDelta = 0
+      for (const ob of others as any[]) {
+        const f = (ob as any).frame
+        const candidates: Array<{target:number, current:number}> = [
+          { target: f.x, current: selMinX },
+          { target: f.x + f.width, current: selMinX },
+          { target: f.x, current: selMaxX },
+          { target: f.x + f.width, current: selMaxX },
+          { target: f.x + f.width / 2, current: selCX }
+        ]
+        for (const c of candidates) {
+          const delta = c.target - c.current
+          const dist = Math.abs(delta)
+          if (dist <= threshold && dist < bestXDist) {
+            bestXDist = dist
+            bestXDelta = delta
+          }
+        }
+      }
+      if (bestXDist !== Number.POSITIVE_INFINITY) snapDx = bestXDelta
+
+      // compute best Y snap (match top/bottom/middle)
+      let bestYDist = Number.POSITIVE_INFINITY
+      let bestYDelta = 0
+      for (const ob of others as any[]) {
+        const f = (ob as any).frame
+        const candidates: Array<{target:number, current:number}> = [
+          { target: f.y, current: selMinY },
+          { target: f.y + f.height, current: selMinY },
+          { target: f.y, current: selMaxY },
+          { target: f.y + f.height, current: selMaxY },
+          { target: f.y + f.height / 2, current: selCY }
+        ]
+        for (const c of candidates) {
+          const delta = c.target - c.current
+          const dist = Math.abs(delta)
+          if (dist <= threshold && dist < bestYDist) {
+            bestYDist = dist
+            bestYDelta = delta
+          }
+        }
+      }
+      if (bestYDist !== Number.POSITIVE_INFINITY) snapDy = bestYDelta
+    }
+
+    if (snapDx !== 0 || snapDy !== 0) {
+      // apply snap deltas and re-clamp per block
+      updates = updates.map((u: any) => {
+        const base = (drag.initialFrames as any[]).find(ff => ff.id === u.id)
+        const width = base?.frame?.width ?? 0
+        const height = base?.frame?.height ?? 0
+        const maxX = Math.max(0, rect.width - width)
+        const maxY = Math.max(0, rect.height - height)
+        return {
+          id: u.id,
+          x: clampToCanvas(u.x + snapDx, 0, maxX),
+          y: clampToCanvas(u.y + snapDy, 0, maxY)
+        }
+      })
+    }
     editor.setFramesAbsolute(updates)
   } else if (editor.interactionMode === 'marquee') {
     const root = (e.currentTarget as HTMLElement)

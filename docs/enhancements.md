@@ -79,6 +79,7 @@ This document captures follow-up improvements after each implementation. Focus a
 16) Alignment Guides
 - Added simple non-magnetic alignment guides within 5px tolerance (edges and centers).
 - Future: snapping (magnetism) with threshold, guide prioritization, and toggle.
+ - Enabled basic magnetism: blocks snap to nearest guide within 5px.
 
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
