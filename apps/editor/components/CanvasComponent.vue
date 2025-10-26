@@ -40,10 +40,8 @@ function onPointerDown(e: PointerEvent) {
   const x = e.clientX - rect.left
   const y = e.clientY - rect.top
   const hit = (editor as any).getTopmostAtPoint(x, y)
-  console.log('[canvas] pointerdown', { x, y, hitId: hit?.id, shiftKey: e.shiftKey })
   if (hit && hit.id) {
     editor.selectBlock(hit.id, e.shiftKey)
-    console.log('[canvas] select', editor.selectedBlockIds)
     try {
       root.setPointerCapture(e.pointerId)
     } catch {}
@@ -56,10 +54,8 @@ function onPointerDown(e: PointerEvent) {
         return { id, frame: b?.frame ? { ...b.frame } : null }
       })
     }
-    console.log('[canvas] drag:start', (editor as any)._drag)
   } else {
     editor.clearSelection()
-    console.log('[canvas] clearSelection')
   }
 }
 
@@ -71,17 +67,22 @@ function onPointerMove(e: PointerEvent) {
     const y = e.clientY - rect.top
     const drag = (editor as any)._drag
     if (!drag) return
-    const dx = x - drag.start.x
-    const dy = y - drag.start.y
+    let dx = x - drag.start.x
+    let dy = y - drag.start.y
+    // Snap deltas to 8px grid
+    const grid = 8
+    dx = Math.round(dx / grid) * grid
+    dy = Math.round(dy / grid) * grid
     // Apply absolute positions based on initial frames to avoid compounding
-    const updates = drag.initialFrames
+    let updates = drag.initialFrames
       .filter((f: any) => f.frame)
       .map((f: any) => ({ id: f.id, x: f.frame.x + dx, y: f.frame.y + dy }))
+    // Clamp to canvas bounds (0..rect width/height minus block size is not known; clamp origin to >=0)
+    updates = updates.map((u: any) => ({ ...u, x: Math.max(0, u.x), y: Math.max(0, u.y) }))
     editor.setFramesAbsolute(updates)
   }
 }
 function onPointerUp(e: PointerEvent) {
-  console.log('[canvas] pointerup', { mode: editor.interactionMode, pointerId: e.pointerId })
   const root = (e.currentTarget as HTMLElement)
   try {
     root.releasePointerCapture(e.pointerId)
@@ -91,7 +92,6 @@ function onPointerUp(e: PointerEvent) {
   editor.setInteractionMode('idle')
   if (wasDragging) {
     editor.addToHistory()
-    console.log('[canvas] drag:commit')
   }
 }
 </script>

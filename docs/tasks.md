@@ -8,7 +8,7 @@ Track all implementation tasks with their completion status.
 - [x] Store: selection state and `interactionMode`
 - [x] Pointer input layer: `pointerdown/move/up/cancel` with capture
 - [x] Hit-testing: topmost block by `zIndex` and frame
-- [ ] Drag with 8px grid snapping and bounds clamping
+- [x] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
 - [ ] Marquee selection (rubber-band) on empty canvas drag
 - [ ] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
