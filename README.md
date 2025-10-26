@@ -56,13 +56,74 @@ npm run dev:runtime  # Start runtime only
 - Prisma schema and initial migration applied
 - NestJS API with environment-based configuration
 
-## Next Steps
+## 📋 M1 — Drag & Drop Canvas (no external libs)
 
-- Implement drag-and-drop (interact.js) with grid snapping
-- Add inline rich text editing (TipTap) for text blocks
-- Connect editor to API: Page CRUD (save/load) with Prisma
-- Implement runtime SSR rendering from stored JSON tree
-- Add responsive breakpoint preview and per-breakpoint styles
+**Goal**: Native drag, resize, and selection on the editor canvas using Pointer Events and Vue reactivity. No external DnD/gesture libraries.
+
+### Constraints
+- Use native Pointer Events and passive listeners where appropriate
+- Single source of truth in Pinia; all mutations go through store actions
+- Integrate with undo/redo history; coalesce moves into a single history step
+- Grid snapping default: 8px; configurable later
+- Respect canvas bounds; enforce minimum block size
+
+### Tasks
+1) Data model for layout
+   - Add `frame` to blocks: `{ x, y, width, height }` in canvas pixels
+   - Add `zIndex` field (simple stacking order)
+   - Derived selectors for hit-testing rectangles
+
+2) Selection state in store
+   - `selectedBlockIds`, `hoveredBlockId`
+   - `interactionMode`: 'idle' | 'drag' | 'resize' | 'marquee'
+
+3) Pointer input layer on canvas
+   - Unified handlers: `pointerdown`, `pointermove`, `pointerup`, `pointercancel`
+   - Pointer capture on drag start; prevent text selection during interactions
+   - Touch support (no gestures; single-pointer for M1)
+
+4) Hit-testing and focus
+   - Determine topmost block under pointer by `zIndex` and frame
+   - Click to select; Shift-click to toggle selection
+
+5) Drag move with grid snapping
+   - Compute deltas from initial pointer position
+   - Apply snapping to grid; clamp to canvas bounds
+   - Coalesce move updates; commit final state on `pointerup`
+
+6) Resize handles (N, S, E, W, NE, NW, SE, SW)
+   - Show handles when a single block is selected
+   - Resize with snap and min-size constraints
+
+7) Marquee selection (rubber-band)
+   - Drag on empty space creates a rect; select blocks intersecting the rect
+
+8) Keyboard interactions
+   - Arrow keys nudge by 1px; Shift+Arrow by 10px
+   - Delete removes selected blocks; Esc clears selection
+
+9) Visual aids
+   - Grid overlay toggle; selection rectangle and resize handles
+   - Optional alignment guides to nearest edges (basic, no magnetism in M1)
+
+10) Undo/redo integration
+   - Begin history step on interaction start; finalize on end
+   - Nudge keys create single coalesced steps while key is held
+
+11) Edge cases and QA
+   - High-DPI/zoom scaling correctness
+   - Interaction over iframes/media blocks (use overlay)
+   - Performance with 200+ blocks
+
+### Out of scope for M1 (planned next)
+- Rich text inline editing
+- Persistence (Page CRUD) and SSR runtime wiring
+- Responsive breakpoints and per-breakpoint frames
+- Advanced alignment guides with magnetic snapping
+
+### Quick Links
+- [ ] Tasks for M1 — see [docs/tasks.md#-m1--drag--drop-canvas](docs/tasks.md#-m1--drag--drop-canvas)
+- [ ] Status tracker — see [docs/status.md#-m1--drag--drop-canvas](docs/status.md#-m1--drag--drop-canvas)
 
 ### Troubleshooting
 

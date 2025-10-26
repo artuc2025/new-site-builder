@@ -4,18 +4,20 @@ Track all implementation tasks with their completion status.
 
 ## 📋 M1 — Drag & Drop Canvas
 
-- [ ] Install interact.js in editor package
-- [ ] Create drag/drop service utility
-- [ ] Implement grid snapping logic (12-column grid)
-- [ ] Add visual grid guides on canvas
-- [ ] Hook up drag events to update block positions in store
-- [ ] Add resize handles with constraints
-- [ ] Implement keyboard nudging (arrow keys)
-- [ ] Add selection highlighting on canvas
-- [ ] Ensure undo/redo works with position changes
+- [ ] Data model: add `frame { x, y, width, height }` and `zIndex`
+- [ ] Store: selection state and `interactionMode`
+- [ ] Pointer input layer: `pointerdown/move/up/cancel` with capture
+- [ ] Hit-testing: topmost block by `zIndex` and frame
+- [ ] Drag with 8px grid snapping and bounds clamping
+- [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
+- [ ] Marquee selection (rubber-band) on empty canvas drag
+- [ ] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
+- [ ] Visual aids: grid overlay toggle, selection rect and handles
+- [ ] Undo/redo: coalesce during interaction, commit on end
+- [ ] Edge cases: high-DPI scaling, iframes overlay, 200+ blocks perf
 
 **Status**: Not started  
-**Exit Criteria**: Blocks can be dragged/resized with grid snapping, undo/redo preserved
+**Exit Criteria**: Blocks can be selected, dragged and resized with 8px snapping; keyboard nudging works; undo/redo preserves interactions without extra steps
 
 ---
 

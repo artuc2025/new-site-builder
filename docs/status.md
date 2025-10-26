@@ -30,9 +30,27 @@
 - Runtime SSR integration with editor data not implemented.
 - Authentication and asset upload pipeline not implemented.
 
+## 📋 M1 — Drag & Drop Canvas
+
+- Status: Not started
+- Focus: Native Pointer Events; selection, drag/resize with 8px snapping, keyboard nudging; undo/redo coalescing; basic visual guides.
+
+### M1 Progress
+- [ ] Data model: frame `{ x, y, width, height }`, `zIndex`
+- [ ] Store: selection state and `interactionMode`
+- [ ] Pointer input layer: `pointerdown/move/up/cancel` with capture
+- [ ] Hit-testing: topmost block by `zIndex` and frame
+- [ ] Drag with 8px grid snapping and bounds clamping
+- [ ] Resize handles with min-size constraints
+- [ ] Marquee selection (rubber-band)
+- [ ] Keyboard: arrows (1px), Shift+arrows (10px), Delete, Esc
+- [ ] Visual aids: grid overlay, selection rect, handles
+- [ ] Undo/redo: coalesce during interaction, commit on end
+- [ ] Edge cases QA: high-DPI, iframes overlay, 200+ blocks perf
+
 ## Next Plans (Short-Term)
 
-1. Implement drag-and-drop (interact.js) in editor canvas with grid snapping.
+1. Implement drag-and-drop in editor canvas using native Pointer Events (no external libs) with grid snapping.
 2. Add inline text editing (TipTap) for text blocks.
 3. Define API contracts for Page CRUD and connect editor save/load.
 4. Add Prisma service and Page endpoints in API; wire to Postgres.
