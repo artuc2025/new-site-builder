@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PageTree } from '@site-builder/types'
+import { useEditorStore } from '~/stores/editor'
 import { Hero, Text, Image, Button, Gallery, Section } from '@site-builder/blocks'
 import { h } from 'vue'
 
@@ -8,6 +9,7 @@ export interface Props {
 }
 
 const props = defineProps<Props>()
+const editor = useEditorStore()
 
 const componentMap = {
   Hero,
@@ -47,7 +49,18 @@ function renderBlock(block: any) {
         zIndex: String(block.zIndex ?? 0)
       }"
     >
-      <component :is="() => renderBlock(block)" />
+      <div
+        class="w-full h-full"
+        :class="{
+          'ring-2 ring-blue-500': editor.selectedBlockIds.includes(block.id),
+          'ring-1 ring-gray-300': !editor.selectedBlockIds.includes(block.id) && editor.hoveredBlockId === block.id
+        }"
+        @mouseenter="() => editor.setHovered(block.id)"
+        @mouseleave="() => editor.setHovered(null)"
+        @click.stop="(e) => editor.selectBlock(block.id, e.shiftKey)"
+      >
+        <component :is="() => renderBlock(block)" />
+      </div>
     </div>
   </div>
 </template>

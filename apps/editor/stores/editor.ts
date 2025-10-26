@@ -13,6 +13,9 @@ export const useEditorStore = defineStore('editor', {
       body: []
     } as PageTree,
     selectedId: null as string | null,
+    selectedBlockIds: [] as string[],
+    hoveredBlockId: null as string | null,
+    interactionMode: 'idle' as 'idle' | 'drag' | 'resize' | 'marquee',
     history: [] as PageTree[],
     historyIndex: -1 as number,
     breakpoint: 'lg' as 'lg' | 'md' | 'sm'
@@ -58,8 +61,26 @@ export const useEditorStore = defineStore('editor', {
       this.addToHistory()
     },
 
-    selectBlock(id: string) {
+    selectBlock(id: string, append = false) {
       this.selectedId = id
+      if (append) {
+        if (!this.selectedBlockIds.includes(id)) this.selectedBlockIds.push(id)
+      } else {
+        this.selectedBlockIds = [id]
+      }
+    },
+
+    clearSelection() {
+      this.selectedId = null
+      this.selectedBlockIds = []
+    },
+
+    setHovered(id: string | null) {
+      this.hoveredBlockId = id
+    },
+
+    setInteractionMode(mode: 'idle' | 'drag' | 'resize' | 'marquee') {
+      this.interactionMode = mode
     },
 
     updateBlockProps(id: string, props: Record<string, any>) {
