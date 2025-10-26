@@ -76,6 +76,10 @@ This document captures follow-up improvements after each implementation. Focus a
 15) Add Flow UX
 - New blocks are auto-selected and assigned topmost `zIndex` (max+1) to ensure visibility and immediate editability.
 
+16) Alignment Guides
+- Added simple non-magnetic alignment guides within 5px tolerance (edges and centers).
+- Future: snapping (magnetism) with threshold, guide prioritization, and toggle.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.

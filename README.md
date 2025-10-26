@@ -8,8 +8,8 @@ Visual no-code website builder in the style of Tilda/Webflow.
 # Install dependencies
 npm install  # ✅ Dependencies installed successfully
 
-# Set up database (create .env file in apps/api/)
-# DATABASE_URL="postgresql://user:password@localhost:5432/sitebuilder"
+# Set up database (copy env example in apps/api/)
+# cp apps/api/env.example apps/api/.env
 
 # Generate Prisma client
 npm run prisma:generate --workspace=@site-builder/api

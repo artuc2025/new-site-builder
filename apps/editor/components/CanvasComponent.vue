@@ -36,6 +36,9 @@ function setGlobalUserSelect(disabled: boolean) {
   } catch {}
 }
 
+const guideXs = ref<number[]>([])
+const guideYs = ref<number[]>([])
+
 const componentMap = {
   Hero,
   Text,
@@ -191,6 +194,52 @@ function onPointerMove(e: PointerEvent) {
           y: clampToCanvas(ny, 0, maxY)
         }
       })
+
+    // Compute simple non-magnetic alignment guides (within 5px) against other blocks
+    const tol = 5
+    const selectedIds = new Set(editor.selectedBlockIds)
+    const movingRects = drag.initialFrames
+      .filter((f: any) => f.frame)
+      .map((f: any) => {
+        const u = updates.find((uu: any) => uu.id === f.id)
+        const x = (u?.x ?? f.frame.x)
+        const y = (u?.y ?? f.frame.y)
+        return { x, y, width: f.frame.width, height: f.frame.height }
+      })
+    const selMinX = Math.min(...movingRects.map((r: any) => r.x))
+    const selMinY = Math.min(...movingRects.map((r: any) => r.y))
+    const selMaxX = Math.max(...movingRects.map((r: any) => r.x + r.width))
+    const selMaxY = Math.max(...movingRects.map((r: any) => r.y + r.height))
+    const selCX = (selMinX + selMaxX) / 2
+    const selCY = (selMinY + selMaxY) / 2
+
+    const others = (editor.tree.body as any[]).filter(b => !selectedIds.has((b as any).id) && (b as any).frame)
+    const vx: number[] = []
+    const hy: number[] = []
+    for (const ob of others) {
+      const f = (ob as any).frame
+      const oL = f.x
+      const oR = f.x + f.width
+      const oC = f.x + f.width / 2
+      const oT = f.y
+      const oB = f.y + f.height
+      const oM = f.y + f.height / 2
+      // vertical guides (match x)
+      if (Math.abs(selMinX - oL) <= tol) vx.push(oL)
+      if (Math.abs(selMinX - oR) <= tol) vx.push(oR)
+      if (Math.abs(selMaxX - oL) <= tol) vx.push(oL)
+      if (Math.abs(selMaxX - oR) <= tol) vx.push(oR)
+      if (Math.abs(selCX - oC) <= tol) vx.push(oC)
+      // horizontal guides (match y)
+      if (Math.abs(selMinY - oT) <= tol) hy.push(oT)
+      if (Math.abs(selMinY - oB) <= tol) hy.push(oB)
+      if (Math.abs(selMaxY - oT) <= tol) hy.push(oT)
+      if (Math.abs(selMaxY - oB) <= tol) hy.push(oB)
+      if (Math.abs(selCY - oM) <= tol) hy.push(oM)
+    }
+    // de-duplicate
+    guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
+    guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
     editor.setFramesAbsolute(updates)
   } else if (editor.interactionMode === 'marquee') {
     const root = (e.currentTarget as HTMLElement)
@@ -257,6 +306,8 @@ function onPointerUp(e: PointerEvent) {
   ;(editor as any)._marquee = undefined
   ;(editor as any)._resize = undefined
   editor.setInteractionMode('idle')
+  guideXs.value = []
+  guideYs.value = []
   if (wasDragging) {
     editor.addToHistory()
   } else if (wasMarquee) {
@@ -390,6 +441,13 @@ function onKeyUp(e: KeyboardEvent) {
         </template>
       </div>
     </div>
+    <!-- Alignment guides -->
+    <template v-for="gx in guideXs" :key="'gx-'+gx">
+      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ left: gx + 'px', top: '0', width: '1px', height: '100%', zIndex: '9998' }" />
+    </template>
+    <template v-for="gy in guideYs" :key="'gy-'+gy">
+      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ top: gy + 'px', left: '0', height: '1px', width: '100%', zIndex: '9998' }" />
+    </template>
     <div
       v-if="marqueeRect.visible"
       class="absolute pointer-events-none border-2 border-blue-400/60 bg-blue-400/10"
