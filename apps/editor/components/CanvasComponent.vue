@@ -43,6 +43,55 @@ function renderBlock(block: any) {
   } as any)
 }
 
+function onResizeHandleDown(dir: string, block: any, e: PointerEvent) {
+  e.stopPropagation()
+  const root = canvasRoot.value
+  if (!root) return
+  root.focus()
+  try {
+    root.setPointerCapture(e.pointerId)
+  } catch {}
+  const rect = root.getBoundingClientRect()
+  const x = e.clientX - rect.left
+  const y = e.clientY - rect.top
+  editor.setInteractionMode('resize')
+  ;(editor as any)._resize = {
+    pointerId: e.pointerId,
+    dir,
+    blockId: block.id,
+    start: { x, y },
+    baseFrame: block.frame ? { ...block.frame } : null
+  }
+}
+
+function handleStyle(dir: string) {
+  const size = 8
+  const base: Record<string, string> = {
+    width: size + 'px',
+    height: size + 'px',
+    position: 'absolute'
+  }
+  switch (dir) {
+    case 'n':
+      return { ...base, left: '50%', top: '-4px', transform: 'translateX(-50%)', cursor: 'ns-resize' }
+    case 's':
+      return { ...base, left: '50%', bottom: '-4px', transform: 'translateX(-50%)', cursor: 'ns-resize' }
+    case 'e':
+      return { ...base, top: '50%', right: '-4px', transform: 'translateY(-50%)', cursor: 'ew-resize' }
+    case 'w':
+      return { ...base, top: '50%', left: '-4px', transform: 'translateY(-50%)', cursor: 'ew-resize' }
+    case 'ne':
+      return { ...base, right: '-4px', top: '-4px', cursor: 'nesw-resize' }
+    case 'nw':
+      return { ...base, left: '-4px', top: '-4px', cursor: 'nwse-resize' }
+    case 'se':
+      return { ...base, right: '-4px', bottom: '-4px', cursor: 'nwse-resize' }
+    case 'sw':
+      return { ...base, left: '-4px', bottom: '-4px', cursor: 'nesw-resize' }
+  }
+  return base
+}
+
 function selectWithRules(id: string, shiftKey: boolean) {
   const isSelected = editor.selectedBlockIds.includes(id)
   if (shiftKey) {
@@ -137,6 +186,43 @@ function onPointerMove(e: PointerEvent) {
     const height = Math.abs(y - mq.start.y)
     marqueeRect.value = { x: left, y: top, width, height, visible: true }
     
+  } else if (editor.interactionMode === 'resize') {
+    const root = (e.currentTarget as HTMLElement)
+    const rect = root.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    const rz = (editor as any)._resize
+    if (!rz || !rz.baseFrame) return
+    const grid = 8
+    const dx = Math.round((x - rz.start.x) / grid) * grid
+    const dy = Math.round((y - rz.start.y) / grid) * grid
+    let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
+    // adjust based on handle direction
+    if (rz.dir.includes('e')) {
+      bw = Math.max(32, bw + dx)
+    }
+    if (rz.dir.includes('s')) {
+      bh = Math.max(32, bh + dy)
+    }
+    if (rz.dir.includes('w')) {
+      const newW = Math.max(32, bw - dx)
+      const deltaW = newW - bw
+      bx = Math.max(0, bx - deltaW)
+      bw = newW
+    }
+    if (rz.dir.includes('n')) {
+      const newH = Math.max(32, bh - dy)
+      const deltaH = newH - bh
+      by = Math.max(0, by - deltaH)
+      bh = newH
+    }
+    // clamp to canvas bounds on right/bottom
+    const maxX = Math.max(0, rect.width - bw)
+    const maxY = Math.max(0, rect.height - bh)
+    bx = Math.min(Math.max(0, bx), maxX)
+    by = Math.min(Math.max(0, by), maxY)
+    // apply immutably via store
+    editor.setFrameRect(rz.blockId, { x: bx, y: by, width: bw, height: bh })
   }
 }
 function onPointerUp(e: PointerEvent) {
@@ -146,8 +232,10 @@ function onPointerUp(e: PointerEvent) {
   } catch {}
   const wasDragging = editor.interactionMode === 'drag'
   const wasMarquee = editor.interactionMode === 'marquee'
+  const wasResize = editor.interactionMode === 'resize'
   ;(editor as any)._drag = undefined
   ;(editor as any)._marquee = undefined
+  ;(editor as any)._resize = undefined
   editor.setInteractionMode('idle')
   if (wasDragging) {
     editor.addToHistory()
@@ -161,6 +249,8 @@ function onPointerUp(e: PointerEvent) {
       
     }
     marqueeRect.value = { x: 0, y: 0, width: 0, height: 0, visible: false }
+  } else if (wasResize) {
+    editor.addToHistory()
   }
 }
 
@@ -233,6 +323,18 @@ function onKeyUp(e: KeyboardEvent) {
         @click.stop="(e) => selectWithRules(block.id, e.shiftKey)"
       >
         <component :is="() => renderBlock(block)" />
+        <template v-if="editor.selectedBlockIds.length === 1 && editor.selectedBlockIds[0] === block.id">
+          <!-- resize handles -->
+          <div class="absolute inset-0 pointer-events-none">
+            <div
+              v-for="dir in ['n','s','e','w','ne','nw','se','sw']"
+              :key="dir"
+              class="pointer-events-auto bg-white border border-blue-500 rounded-sm"
+              :style="handleStyle(dir)"
+              @pointerdown.stop="(e: PointerEvent) => onResizeHandleDown(dir as string, block, e)"
+            />
+          </div>
+        </template>
       </div>
     </div>
     <div

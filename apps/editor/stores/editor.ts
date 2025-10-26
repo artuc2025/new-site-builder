@@ -1,7 +1,10 @@
 import { defineStore } from 'pinia'
-import { produce } from 'immer'
+import { produce, setAutoFreeze } from 'immer'
 import type { PageTree, PageTreeBlock, Frame } from '@site-builder/types'
 import { getBlockConfig } from '@site-builder/blocks'
+
+// Disable Immer auto-freeze to allow direct mutations during interactions
+setAutoFreeze(false)
 
 export const useEditorStore = defineStore('editor', {
   state: () => ({
@@ -125,16 +128,25 @@ export const useEditorStore = defineStore('editor', {
     },
 
     setFramesAbsolute(updates: Array<{ id: string, x: number, y: number }>) {
-      // Set absolute frame positions (used during drag based on initial frames)
-      this.tree = produce(this.tree, (draft => {
-        for (const { id, x, y } of updates) {
-          const b = (draft.body as any[]).find(bb => bb.id === id)
-          if (b && b.frame) {
-            b.frame.x = x
-            b.frame.y = y
-          }
+      // Directly mutate for performance and to avoid Immer/Vue proxy issues
+      for (const { id, x, y } of updates) {
+        const b = (this.tree.body as any[]).find(bb => bb.id === id)
+        if (b && b.frame) {
+          b.frame.x = x
+          b.frame.y = y
         }
-      }))
+      }
+    },
+
+    setFrameRect(id: string, rect: { x?: number; y?: number; width?: number; height?: number }) {
+      // Direct mutation to avoid Immer/Vue proxy conflicts during high-frequency updates
+      const b = (this.tree.body as any[]).find(bb => bb.id === id)
+      if (b && b.frame) {
+        if (typeof rect.x === 'number') b.frame.x = rect.x
+        if (typeof rect.y === 'number') b.frame.y = rect.y
+        if (typeof rect.width === 'number') b.frame.width = rect.width
+        if (typeof rect.height === 'number') b.frame.height = rect.height
+      }
     }
   },
 

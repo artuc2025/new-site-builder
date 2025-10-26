@@ -9,7 +9,7 @@ Track all implementation tasks with their completion status.
 - [x] Pointer input layer: `pointerdown/move/up/cancel` with capture
 - [x] Hit-testing: topmost block by `zIndex` and frame
 - [x] Drag with 8px grid snapping and bounds clamping
-- [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
+- [x] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
 - [x] Marquee selection (rubber-band) on empty canvas drag
 - [x] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay toggle, selection rect and handles
@@ -42,11 +42,11 @@ Track all implementation tasks with their completion status.
 - [x] One-step history commit on release
 
 ### M1.4 — Resize (next)
-- [ ] Display resize handles for single selection
-- [ ] Start resize with pointer capture and handle direction
-- [ ] Apply size deltas with min-size constraints
-- [ ] Snap edges to 8px grid and clamp to canvas
-- [ ] Commit one history step on release
+- [x] Display resize handles for single selection
+- [x] Start resize with pointer capture and handle direction
+- [x] Apply size deltas with min-size constraints
+- [x] Snap edges to 8px grid and clamp to canvas
+- [x] Commit one history step on release
 
 ### M1.5 — Keyboard (next)
 - [x] Arrow keys nudge 1px; Shift+Arrow nudge 10px
