@@ -4,7 +4,7 @@ Track all implementation tasks with their completion status.
 
 ## 📋 M1 — Drag & Drop Canvas
 
-- [ ] Data model: add `frame { x, y, width, height }` and `zIndex`
+- [x] Data model: add `frame { x, y, width, height }` and `zIndex`
 - [ ] Store: selection state and `interactionMode`
 - [ ] Pointer input layer: `pointerdown/move/up/cancel` with capture
 - [ ] Hit-testing: topmost block by `zIndex` and frame
@@ -16,7 +16,18 @@ Track all implementation tasks with their completion status.
 - [ ] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases: high-DPI scaling, iframes overlay, 200+ blocks perf
 
-**Status**: Not started  
+### M1.1 — Data model
+- [x] Define `Frame` type in `@site-builder/types` (`{ x, y, width, height }`)
+- [x] Extend block base type with `frame: Frame` and `zIndex: number`
+- [x] Provide defaults for blocks in `@site-builder/blocks` (sensible initial sizes)
+- [ ] Update editor store state to include `selectedBlockIds`, `hoveredBlockId`, `interactionMode`
+- [ ] Add selectors: `getBlockById`, `getTopmostAtPoint`, `getBlocksInRect`
+- [ ] Add util helpers: `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
+- [ ] Ensure Immer-based immutable updates for move/resize primitives
+- [ ] Backfill existing pages/seed to include `frame` and `zIndex`
+- [x] Smoke test: render frames in canvas positioning (no interactions yet)
+
+**Status**: In progress  
 **Exit Criteria**: Blocks can be selected, dragged and resized with 8px snapping; keyboard nudging works; undo/redo preserves interactions without extra steps
 
 ---

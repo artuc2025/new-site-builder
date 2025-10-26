@@ -61,12 +61,22 @@ export interface GridArea {
   [key in Breakpoint]?: string
 }
 
+// Geometry
+export interface Frame {
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export interface BaseBlock {
   id: string
   type: string
   gridArea?: GridArea
   props: Record<string, any>
   style?: Record<string, any>
+  frame: Frame
+  zIndex: number
 }
 
 export interface SectionBlock extends BaseBlock {
@@ -92,6 +102,9 @@ export interface PageTree {
 export interface EditorState {
   tree: PageTree
   selectedId: string | null
+  selectedBlockIds?: string[]
+  hoveredBlockId?: string | null
+  interactionMode?: 'idle' | 'drag' | 'resize' | 'marquee'
   history: Patch[]
   future: Patch[]
   breakpoint: Breakpoint

@@ -19,27 +19,36 @@ const componentMap = {
 }
 
 function renderBlock(block: any) {
-  const Component = componentMap[block.type as keyof typeof componentMap]
+  const Component = componentMap[block.type as keyof typeof componentMap] as any
   
   if (!Component) {
     return h('div', { class: 'p-4 border border-red-300' }, `Unknown block: ${block.type}`)
   }
 
-  return h(Component, {
+  return h(Component as any, {
     id: block.id,
     props: block.props,
     style: block.style
-  })
+  } as any)
 }
 </script>
 
 <template>
-  <div>
-    <component
+  <div class="relative" style="min-height: 600px;">
+    <div
       v-for="block in tree.body"
       :key="block.id"
-      :is="() => renderBlock(block)"
-    />
+      class="absolute"
+      :style="{
+        left: block.frame?.x + 'px',
+        top: block.frame?.y + 'px',
+        width: block.frame?.width + 'px',
+        height: block.frame?.height + 'px',
+        zIndex: String(block.zIndex ?? 0)
+      }"
+    >
+      <component :is="() => renderBlock(block)" />
+    </div>
   </div>
 </template>
 

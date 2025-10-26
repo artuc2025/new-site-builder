@@ -8,6 +8,7 @@ export interface BlockConfig {
   category: 'layout' | 'content' | 'form'
   defaultProps: Record<string, any>
   defaultStyle?: Record<string, any>
+  defaultFrame?: { x: number; y: number; width: number; height: number }
 }
 
 export const blockConfigs: Record<string, BlockConfig> = {
@@ -29,7 +30,8 @@ export const blockConfigs: Record<string, BlockConfig> = {
         label: 'Get Started',
         href: '#'
       }
-    }
+    },
+    defaultFrame: { x: 40, y: 40, width: 960, height: 420 }
   },
   Text: {
     type: 'Text',
@@ -41,7 +43,8 @@ export const blockConfigs: Record<string, BlockConfig> = {
       content: 'Add your text here',
       variant: 'p',
       align: 'left'
-    }
+    },
+    defaultFrame: { x: 40, y: 40, width: 600, height: 120 }
   },
   Image: {
     type: 'Image',
@@ -53,7 +56,8 @@ export const blockConfigs: Record<string, BlockConfig> = {
       assetId: '',
       alt: 'Image',
       objectFit: 'cover'
-    }
+    },
+    defaultFrame: { x: 40, y: 40, width: 480, height: 320 }
   },
   Button: {
     type: 'Button',
@@ -66,7 +70,8 @@ export const blockConfigs: Record<string, BlockConfig> = {
       href: '#',
       variant: 'primary',
       size: 'md'
-    }
+    },
+    defaultFrame: { x: 40, y: 40, width: 160, height: 48 }
   },
   Section: {
     type: 'Section',
@@ -82,7 +87,8 @@ export const blockConfigs: Record<string, BlockConfig> = {
     },
     defaultStyle: {
       padding: 'md'
-    }
+    },
+    defaultFrame: { x: 0, y: 0, width: 1024, height: 600 }
   }
 }
 

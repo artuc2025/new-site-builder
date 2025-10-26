@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { produce } from 'immer'
-import type { PageTree, PageTreeBlock } from '@site-builder/types'
+import type { PageTree, PageTreeBlock, Frame } from '@site-builder/types'
 import { getBlockConfig } from '@site-builder/blocks'
 
 export const useEditorStore = defineStore('editor', {
@@ -39,11 +39,16 @@ export const useEditorStore = defineStore('editor', {
       console.log('Adding block:', config)
       if (!config) return
 
+      const nextZ = this.tree.body.length
+      const defaultFrame: Frame = (config as any).defaultFrame || { x: 40, y: 40, width: 320, height: 180 }
+
       const block: PageTreeBlock = {
         id: `${type.toLowerCase()}_${Date.now()}`,
         type: config.type,
         props: { ...config.defaultProps },
-        style: config.defaultStyle
+        style: config.defaultStyle,
+        frame: { ...defaultFrame },
+        zIndex: nextZ
       }
 
       this.tree = produce(this.tree, (draft) => {
