@@ -56,6 +56,19 @@ npm run dev:runtime  # Start runtime only
 - Prisma schema and initial migration applied
 - NestJS API with environment-based configuration
 
+## Next Up
+
+- Finish M1 gaps in `apps/editor`:
+  - Visual aids: grid overlay toggle, selection rect/handle styling
+  - Keyboard: Delete, Esc, coalesced nudges while key is held
+  - Helpers/selectors: `getBlockById`, `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
+  - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
+- M2: Inline text editing (TipTap) for Text/Hero blocks
+- M3: Page persistence (API contracts, Prisma service, CRUD; connect editor)
+- DX: add `.env.example` for API, add runtime URL here, unify scripts
+
+Suggested default: close remaining M1 items, then start M2 while drafting M3 contracts.
+
 ## 📋 M1 — Drag & Drop Canvas (no external libs)
 
 **Goal**: Native drag, resize, and selection on the editor canvas using Pointer Events and Vue reactivity. No external DnD/gesture libraries.
