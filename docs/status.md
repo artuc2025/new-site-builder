@@ -32,20 +32,20 @@
 
 ## 📋 M1 — Drag & Drop Canvas
 
-- Status: Not started
+- Status: In progress
 - Focus: Native Pointer Events; selection, drag/resize with 8px snapping, keyboard nudging; undo/redo coalescing; basic visual guides.
 
 ### M1 Progress
-- [ ] Data model: frame `{ x, y, width, height }`, `zIndex`
-- [ ] Store: selection state and `interactionMode`
-- [ ] Pointer input layer: `pointerdown/move/up/cancel` with capture
-- [ ] Hit-testing: topmost block by `zIndex` and frame
-- [ ] Drag with 8px grid snapping and bounds clamping
+- [x] Data model: frame `{ x, y, width, height }`, `zIndex`
+- [x] Store: selection state and `interactionMode`
+- [x] Pointer input layer: `pointerdown/move/up/cancel` with capture
+- [x] Hit-testing: topmost block by `zIndex` and frame
+- [x] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles with min-size constraints
-- [ ] Marquee selection (rubber-band)
+- [x] Marquee selection (rubber-band)
 - [ ] Keyboard: arrows (1px), Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay, selection rect, handles
-- [ ] Undo/redo: coalesce during interaction, commit on end
+- [x] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases QA: high-DPI, iframes overlay, 200+ blocks perf
 
 ## Next Plans (Short-Term)

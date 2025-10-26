@@ -11,7 +11,7 @@ Track all implementation tasks with their completion status.
 - [x] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
 - [x] Marquee selection (rubber-band) on empty canvas drag
-- [ ] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
+- [x] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay toggle, selection rect and handles
 - [x] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases: high-DPI scaling, iframes overlay, 200+ blocks perf
@@ -26,6 +26,42 @@ Track all implementation tasks with their completion status.
 - [ ] Add util helpers: `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
 - [x] Ensure Immer-based immutable updates for move/resize primitives
 - [ ] Backfill existing pages/seed to include `frame` and `zIndex`
+
+### M1.2 — Pointer and Selection
+- [x] Click selection (single/multi with Shift)
+- [x] Hover highlight on blocks
+- [x] Empty-area click clears selection
+- [x] Marquee selection with overlay rectangle
+- [x] Group drag when multiple selected (click on any selected)
+
+### M1.3 — Drag Move
+- [x] Pointer capture and drag-start state
+- [x] Absolute updates from initial frames (no compounding)
+- [x] Snap to 8px grid during move
+- [x] Clamp origin to canvas bounds (x,y ≥ 0)
+- [x] One-step history commit on release
+
+### M1.4 — Resize (next)
+- [ ] Display resize handles for single selection
+- [ ] Start resize with pointer capture and handle direction
+- [ ] Apply size deltas with min-size constraints
+- [ ] Snap edges to 8px grid and clamp to canvas
+- [ ] Commit one history step on release
+
+### M1.5 — Keyboard (next)
+- [x] Arrow keys nudge 1px; Shift+Arrow nudge 10px
+- [ ] Delete removes selection; Esc clears selection
+- [ ] Coalesce nudges into single history step while key held
+
+### M1.6 — Visual Aids (next)
+- [ ] Grid overlay toggle
+- [ ] Selection rectangle and handle styling
+- [ ] Basic alignment guides (non-magnetic)
+
+### M1.7 — Edge Cases & QA (next)
+- [ ] HiDPI/zoom correctness of pointer coords and snapping
+- [ ] Interaction overlay for media/iframes
+- [ ] Perf sanity with 200+ blocks
 - [x] Smoke test: render frames in canvas positioning (no interactions yet)
 
 **Status**: In progress  

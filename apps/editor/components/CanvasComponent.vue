@@ -10,6 +10,7 @@ export interface Props {
 
 const props = defineProps<Props>()
 const editor = useEditorStore()
+const canvasRoot = ref<HTMLElement | null>(null)
 
 const marqueeRect = ref<{ x: number; y: number; width: number; height: number; visible: boolean }>({
   x: 0,
@@ -59,6 +60,8 @@ function selectWithRules(id: string, shiftKey: boolean) {
 
 function onPointerDown(e: PointerEvent) {
   const root = (e.currentTarget as HTMLElement)
+  // focus canvas for keyboard handling
+  root.focus()
   const rect = root.getBoundingClientRect()
   const x = e.clientX - rect.left
   const y = e.clientY - rect.top
@@ -107,11 +110,19 @@ function onPointerMove(e: PointerEvent) {
     dx = Math.round(dx / grid) * grid
     dy = Math.round(dy / grid) * grid
     // Apply absolute positions based on initial frames to avoid compounding
-    let updates = drag.initialFrames
+    const updates = drag.initialFrames
       .filter((f: any) => f.frame)
-      .map((f: any) => ({ id: f.id, x: f.frame.x + dx, y: f.frame.y + dy }))
-    // Clamp to canvas bounds (0..rect width/height minus block size is not known; clamp origin to >=0)
-    updates = updates.map((u: any) => ({ ...u, x: Math.max(0, u.x), y: Math.max(0, u.y) }))
+      .map((f: any) => {
+        const nx = f.frame.x + dx
+        const ny = f.frame.y + dy
+        const maxX = Math.max(0, rect.width - f.frame.width)
+        const maxY = Math.max(0, rect.height - f.frame.height)
+        return {
+          id: f.id,
+          x: Math.min(Math.max(0, nx), maxX),
+          y: Math.min(Math.max(0, ny), maxY)
+        }
+      })
     editor.setFramesAbsolute(updates)
   } else if (editor.interactionMode === 'marquee') {
     const root = (e.currentTarget as HTMLElement)
@@ -152,10 +163,53 @@ function onPointerUp(e: PointerEvent) {
     marqueeRect.value = { x: 0, y: 0, width: 0, height: 0, visible: false }
   }
 }
+
+function onKeyDown(e: KeyboardEvent) {
+  const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+  if (!arrowKeys.includes(e.key)) return
+  if (!editor.selectedBlockIds.length) return
+  e.preventDefault()
+
+  const step = e.shiftKey ? 10 : 1
+  let dx = 0
+  let dy = 0
+  if (e.key === 'ArrowLeft') dx = -step
+  if (e.key === 'ArrowRight') dx = step
+  if (e.key === 'ArrowUp') dy = -step
+  if (e.key === 'ArrowDown') dy = step
+
+  // Compute absolute updates with clamping to canvas bounds
+  const rect = canvasRoot.value?.getBoundingClientRect()
+  const updates = editor.selectedBlockIds.map((id: string) => {
+    const b = (editor.tree.body as any[]).find(bb => bb.id === id)
+    const bx = (b?.frame?.x ?? 0) + dx
+    const by = (b?.frame?.y ?? 0) + dy
+    if (rect && b?.frame) {
+      const maxX = Math.max(0, rect.width - b.frame.width)
+      const maxY = Math.max(0, rect.height - b.frame.height)
+      return { id, x: Math.min(Math.max(0, bx), maxX), y: Math.min(Math.max(0, by), maxY) }
+    }
+    return { id, x: Math.max(0, bx), y: Math.max(0, by) }
+  })
+  editor.setFramesAbsolute(updates)
+
+  if (!(editor as any)._nudgeActive) {
+    (editor as any)._nudgeActive = true
+  }
+}
+
+function onKeyUp(e: KeyboardEvent) {
+  const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+  if (!arrowKeys.includes(e.key)) return
+  if ((editor as any)._nudgeActive) {
+    editor.addToHistory()
+    ;(editor as any)._nudgeActive = false
+  }
+}
 </script>
 
 <template>
-  <div class="relative" style="min-height: 600px;" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
+  <div ref="canvasRoot" class="relative" style="min-height: 600px;" tabindex="0" @keydown="onKeyDown" @keyup="onKeyUp" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
     <div
       v-for="block in tree.body"
       :key="block.id"
