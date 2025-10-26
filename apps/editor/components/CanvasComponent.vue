@@ -68,29 +68,30 @@ function onResizeHandleDown(dir: string, block: any, e: PointerEvent) {
 }
 
 function handleStyle(dir: string) {
-  const size = 8
+  const size = 6
   const base: Record<string, string> = {
     width: size + 'px',
     height: size + 'px',
     position: 'absolute'
   }
+  const half = -(size / 2) + 'px'
   switch (dir) {
     case 'n':
-      return { ...base, left: '50%', top: '-4px', transform: 'translateX(-50%)', cursor: 'ns-resize' }
+      return { ...base, left: '50%', top: half, transform: 'translateX(-50%)', cursor: 'ns-resize' }
     case 's':
-      return { ...base, left: '50%', bottom: '-4px', transform: 'translateX(-50%)', cursor: 'ns-resize' }
+      return { ...base, left: '50%', bottom: half, transform: 'translateX(-50%)', cursor: 'ns-resize' }
     case 'e':
-      return { ...base, top: '50%', right: '-4px', transform: 'translateY(-50%)', cursor: 'ew-resize' }
+      return { ...base, top: '50%', right: half, transform: 'translateY(-50%)', cursor: 'ew-resize' }
     case 'w':
-      return { ...base, top: '50%', left: '-4px', transform: 'translateY(-50%)', cursor: 'ew-resize' }
+      return { ...base, top: '50%', left: half, transform: 'translateY(-50%)', cursor: 'ew-resize' }
     case 'ne':
-      return { ...base, right: '-4px', top: '-4px', cursor: 'nesw-resize' }
+      return { ...base, right: half, top: half, cursor: 'nesw-resize' }
     case 'nw':
-      return { ...base, left: '-4px', top: '-4px', cursor: 'nwse-resize' }
+      return { ...base, left: half, top: half, cursor: 'nwse-resize' }
     case 'se':
-      return { ...base, right: '-4px', bottom: '-4px', cursor: 'nwse-resize' }
+      return { ...base, right: half, bottom: half, cursor: 'nwse-resize' }
     case 'sw':
-      return { ...base, left: '-4px', bottom: '-4px', cursor: 'nesw-resize' }
+      return { ...base, left: half, bottom: half, cursor: 'nesw-resize' }
   }
   return base
 }
@@ -347,10 +348,10 @@ function onKeyUp(e: KeyboardEvent) {
       }"
     >
       <div
-        class="w-full h-full"
+        class="w-full h-full transition-shadow"
         :class="{
-          'ring-2 ring-blue-500': editor.selectedBlockIds.includes(block.id),
-          'ring-1 ring-gray-300': !editor.selectedBlockIds.includes(block.id) && editor.hoveredBlockId === block.id
+          'ring-1 ring-blue-500/80 ring-offset-2 ring-offset-white shadow-[0_0_0_1px_rgba(59,130,246,0.6)]': editor.selectedBlockIds.includes(block.id),
+          'ring-1 ring-blue-400/60': !editor.selectedBlockIds.includes(block.id) && editor.hoveredBlockId === block.id
         }"
         @mouseenter="() => editor.setHovered(block.id)"
         @mouseleave="() => editor.setHovered(null)"
@@ -365,7 +366,7 @@ function onKeyUp(e: KeyboardEvent) {
             <div
               v-for="dir in ['n','s','e','w','ne','nw','se','sw']"
               :key="dir"
-              class="pointer-events-auto bg-white border border-blue-500 rounded-sm"
+              class="pointer-events-auto bg-white/95 border border-blue-500 rounded-sm shadow-sm transition-transform duration-100 hover:scale-125 hover:border-blue-600"
               :style="handleStyle(dir)"
               @pointerdown.stop="(e: PointerEvent) => onResizeHandleDown(dir as string, block, e)"
             />

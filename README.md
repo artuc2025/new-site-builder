@@ -59,7 +59,6 @@ npm run dev:runtime  # Start runtime only
 ## Next Up
 
 - Finish M1 gaps in `apps/editor`:
-  - Visual aids: selection rect/handle styling
   - Keyboard: coalesced nudges while key is held
   - Helpers/selectors: `getBlockById`, `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks

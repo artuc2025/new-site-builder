@@ -55,7 +55,7 @@ Track all implementation tasks with their completion status.
 
 ### M1.6 — Visual Aids (next)
 - [x] Grid overlay toggle
-- [ ] Selection rectangle and handle styling
+- [x] Selection rectangle and handle styling
 - [ ] Basic alignment guides (non-magnetic)
 
 ### M1.7 — Edge Cases & QA (next)

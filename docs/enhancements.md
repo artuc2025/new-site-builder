@@ -67,6 +67,11 @@ This document captures follow-up improvements after each implementation. Focus a
 - Implemented simple 8px grid overlay with CSS gradients; non-interactive and toggleable.
 - Future: color/opacity settings, adaptive density per zoom, and subgrid highlights at larger scales.
 
+14) Selection & Handles UX
+- Selection ring: thinner, higher-contrast ring with subtle offset and shadow for better visibility on light/dark content.
+- Handles: 6px size, hover scale, slightly stronger border on hover; positioned with half-size offsets to sit flush at edges.
+- Future: show handles only on hover when selected, and keyboard-focus outline for accessibility.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.
