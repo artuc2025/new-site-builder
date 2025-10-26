@@ -2,7 +2,7 @@
 import type { PageTree } from '@site-builder/types'
 import { useEditorStore } from '~/stores/editor'
 import { Hero, Text, Image, Button, Gallery, Section } from '@site-builder/blocks'
-import { h, ref } from 'vue'
+import { h, ref, computed } from 'vue'
 import { snapToGrid, clampToCanvas } from '~/composables/geometry'
 
 export interface Props {
@@ -22,6 +22,19 @@ const marqueeRect = ref<{ x: number; y: number; width: number; height: number; v
 })
 
 const showGrid = ref(false)
+const interacting = computed(() => editor.interactionMode !== 'idle')
+
+function setGlobalUserSelect(disabled: boolean) {
+  try {
+    const el = document.documentElement as HTMLElement
+    if (disabled) {
+      el.style.userSelect = 'none'
+      ;(window.getSelection && window.getSelection())?.removeAllRanges?.()
+    } else {
+      el.style.userSelect = ''
+    }
+  } catch {}
+}
 
 const componentMap = {
   Hero,
@@ -65,6 +78,7 @@ function onResizeHandleDown(dir: string, block: any, e: PointerEvent) {
     start: { x, y },
     baseFrame: block.frame ? { ...block.frame } : null
   }
+  setGlobalUserSelect(true)
 }
 
 function handleStyle(dir: string) {
@@ -133,6 +147,7 @@ function onPointerDown(e: PointerEvent) {
         return { id, frame: b?.frame ? { ...b.frame } : null }
       })
     }
+    setGlobalUserSelect(true)
   } else {
     try {
       root.setPointerCapture(e.pointerId)
@@ -144,7 +159,7 @@ function onPointerDown(e: PointerEvent) {
       start: { x, y }
     }
     marqueeRect.value = { x, y, width: 0, height: 0, visible: true }
-    
+    setGlobalUserSelect(true)
   }
 }
 
@@ -234,6 +249,7 @@ function onPointerUp(e: PointerEvent) {
   try {
     root.releasePointerCapture(e.pointerId)
   } catch {}
+  setGlobalUserSelect(false)
   const wasDragging = editor.interactionMode === 'drag'
   const wasMarquee = editor.interactionMode === 'marquee'
   const wasResize = editor.interactionMode === 'resize'
@@ -314,7 +330,7 @@ function onKeyUp(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="canvasRoot" class="relative" style="min-height: 600px;" tabindex="0" @keydown="onKeyDown" @keyup="onKeyUp" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
+  <div ref="canvasRoot" class="relative" style="min-height: 600px; touch-action: none;" tabindex="0" @keydown="onKeyDown" @keyup="onKeyUp" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
     <!-- Grid overlay (non-interactive) -->
     <div
       v-if="showGrid"

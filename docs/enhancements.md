@@ -58,6 +58,7 @@ This document captures follow-up improvements after each implementation. Focus a
 - Wrapped rendered block content with `pointer-events: none` and `select-none` in the editor canvas to prevent inner links/controls (e.g., Hero CTA) from stealing focus.
 - Used `@click.prevent` on selection wrapper to avoid navigation in edit mode.
 - Future: provide an explicit Preview mode to re-enable pointer events and actual link navigation.
+ - Disabled text selection during interactions (set `user-select: none` on root and cleared selection) and set `touch-action: none` on canvas to avoid browser gestures interfering with drag/resize.
 
 12) Geometry Helper Adoption
 - Added `clampToCanvas(value, min, max)` and refactored drag clamping to use it.
