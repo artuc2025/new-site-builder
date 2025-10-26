@@ -21,7 +21,7 @@ Track all implementation tasks with their completion status.
 - [x] Extend block base type with `frame: Frame` and `zIndex: number`
 - [x] Provide defaults for blocks in `@site-builder/blocks` (sensible initial sizes)
 - [x] Update editor store state to include `selectedBlockIds`, `hoveredBlockId`, `interactionMode`
-- [ ] Add selectors: `getBlockById`
+- [x] Add selectors: `getBlockById`
 - [x] Add selectors: `getTopmostAtPoint`, `getBlocksInRect`
 - [ ] Add util helpers: `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
 - [x] Ensure Immer-based immutable updates for move/resize primitives
@@ -50,8 +50,8 @@ Track all implementation tasks with their completion status.
 
 ### M1.5 — Keyboard (next)
 - [x] Arrow keys nudge 1px; Shift+Arrow nudge 10px
-- [ ] Delete removes selection; Esc clears selection
-- [ ] Coalesce nudges into single history step while key held
+- [x] Delete removes selection; Esc clears selection
+- [x] Coalesce nudges into single history step while key held
 
 ### M1.6 — Visual Aids (next)
 - [ ] Grid overlay toggle

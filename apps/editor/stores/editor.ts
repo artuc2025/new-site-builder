@@ -33,6 +33,19 @@ export const useEditorStore = defineStore('editor', {
       }
     },
 
+    deleteSelected() {
+      if (!this.selectedBlockIds.length) return
+      const ids = new Set(this.selectedBlockIds)
+      this.tree = produce(this.tree, (draft => {
+        const remaining = (draft.body as any[]).filter(b => !ids.has((b as any).id)) as any[]
+        // reindex zIndex to maintain simple stacking order
+        remaining.forEach((b, i) => { (b as any).zIndex = i })
+        ;(draft as any).body = remaining as any
+      }))
+      this.clearSelection()
+      this.addToHistory()
+    },
+
     addToHistory() {
       // Save current state to history
       this.history = this.history.slice(0, this.historyIndex + 1)
@@ -153,6 +166,9 @@ export const useEditorStore = defineStore('editor', {
   getters: {
     canUndo: (state) => state.historyIndex > 0,
     canRedo: (state) => state.historyIndex < state.history.length - 1,
+    getBlockById: (state) => (id: string) => {
+      return (state.tree.body as any[]).find(b => (b as any).id === id) || null
+    },
     getTopmostAtPoint: (state) => (x: number, y: number) => {
       const hits = state.tree.body.filter((b: any) => {
         const f = (b as any).frame

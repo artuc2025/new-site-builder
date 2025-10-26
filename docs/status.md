@@ -43,7 +43,7 @@
 - [x] Drag with 8px grid snapping and bounds clamping
 - [ ] Resize handles with min-size constraints
 - [x] Marquee selection (rubber-band)
-- [ ] Keyboard: arrows (1px), Shift+arrows (10px), Delete, Esc
+- [x] Keyboard: arrows (1px), Shift+arrows (10px), Delete, Esc
 - [ ] Visual aids: grid overlay, selection rect, handles
 - [x] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases QA: high-DPI, iframes overlay, 200+ blocks perf

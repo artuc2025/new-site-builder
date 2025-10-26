@@ -60,7 +60,7 @@ npm run dev:runtime  # Start runtime only
 
 - Finish M1 gaps in `apps/editor`:
   - Visual aids: grid overlay toggle, selection rect/handle styling
-  - Keyboard: Delete, Esc, coalesced nudges while key is held
+  - Keyboard: coalesced nudges while key is held
   - Helpers/selectors: `getBlockById`, `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
 - M2: Inline text editing (TipTap) for Text/Hero blocks

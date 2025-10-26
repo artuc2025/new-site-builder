@@ -45,6 +45,15 @@ This document captures follow-up improvements after each implementation. Focus a
 - Unit tests for geometry helpers.
 - Playwright e2e: select, drag, resize, marquee, keyboard nudge.
 
+9) Selector Performance
+- `getBlockById` getter currently performs a linear search through `tree.body`.
+- For large pages, consider maintaining an `id -> index` map in store state, updating on add/remove/reorder. This reduces lookups to O(1) and simplifies multi-selection operations.
+
+10) Adoption Status
+- Introduced `snapToGrid(value, grid=8)` in `apps/editor/composables/geometry.ts`.
+- Refactored drag/resize code paths in `CanvasComponent.vue` to use it.
+ - Added Delete/Esc keyboard handling; consider debounced delete confirmation for multi-select to avoid accidental removal.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.

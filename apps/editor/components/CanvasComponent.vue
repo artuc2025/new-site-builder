@@ -3,6 +3,7 @@ import type { PageTree } from '@site-builder/types'
 import { useEditorStore } from '~/stores/editor'
 import { Hero, Text, Image, Button, Gallery, Section } from '@site-builder/blocks'
 import { h, ref } from 'vue'
+import { snapToGrid } from '~/composables/geometry'
 
 export interface Props {
   tree: PageTree
@@ -156,8 +157,8 @@ function onPointerMove(e: PointerEvent) {
     let dy = y - drag.start.y
     // Snap deltas to 8px grid
     const grid = 8
-    dx = Math.round(dx / grid) * grid
-    dy = Math.round(dy / grid) * grid
+    dx = snapToGrid(dx, grid)
+    dy = snapToGrid(dy, grid)
     // Apply absolute positions based on initial frames to avoid compounding
     const updates = drag.initialFrames
       .filter((f: any) => f.frame)
@@ -194,8 +195,8 @@ function onPointerMove(e: PointerEvent) {
     const rz = (editor as any)._resize
     if (!rz || !rz.baseFrame) return
     const grid = 8
-    const dx = Math.round((x - rz.start.x) / grid) * grid
-    const dy = Math.round((y - rz.start.y) / grid) * grid
+    const dx = snapToGrid(x - rz.start.x, grid)
+    const dy = snapToGrid(y - rz.start.y, grid)
     let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
     // adjust based on handle direction
     if (rz.dir.includes('e')) {
@@ -256,6 +257,17 @@ function onPointerUp(e: PointerEvent) {
 
 function onKeyDown(e: KeyboardEvent) {
   const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
+  if (e.key === 'Escape') {
+    editor.clearSelection()
+    return
+  }
+  if (e.key === 'Delete' || e.key === 'Backspace') {
+    if (editor.selectedBlockIds.length) {
+      e.preventDefault()
+      editor.deleteSelected()
+    }
+    return
+  }
   if (!arrowKeys.includes(e.key)) return
   if (!editor.selectedBlockIds.length) return
   e.preventDefault()
