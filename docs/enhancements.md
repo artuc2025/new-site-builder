@@ -63,6 +63,10 @@ This document captures follow-up improvements after each implementation. Focus a
 - Added `clampToCanvas(value, min, max)` and refactored drag clamping to use it.
 - Completed: reused in resize and keyboard nudge paths for consistency.
 
+13) Grid Overlay
+- Implemented simple 8px grid overlay with CSS gradients; non-interactive and toggleable.
+- Future: color/opacity settings, adaptive density per zoom, and subgrid highlights at larger scales.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.

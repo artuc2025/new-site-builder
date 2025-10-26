@@ -21,6 +21,8 @@ const marqueeRect = ref<{ x: number; y: number; width: number; height: number; v
   visible: false
 })
 
+const showGrid = ref(false)
+
 const componentMap = {
   Hero,
   Text,
@@ -312,6 +314,26 @@ function onKeyUp(e: KeyboardEvent) {
 
 <template>
   <div ref="canvasRoot" class="relative" style="min-height: 600px;" tabindex="0" @keydown="onKeyDown" @keyup="onKeyUp" @pointerdown="onPointerDown" @pointermove="onPointerMove" @pointerup="onPointerUp" @pointercancel="onPointerUp">
+    <!-- Grid overlay (non-interactive) -->
+    <div
+      v-if="showGrid"
+      class="absolute inset-0 pointer-events-none"
+      :style="{
+        backgroundImage: 'linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)',
+        backgroundSize: '8px 8px'
+      }"
+    />
+
+    <!-- Toolbar -->
+    <div class="absolute top-2 right-2 z-[10000]">
+      <button
+        class="px-2 py-1 text-xs bg-white/80 border border-gray-300 rounded shadow-sm hover:bg-white"
+        @pointerdown.stop
+        @click.stop="showGrid = !showGrid"
+      >
+        {{ showGrid ? 'Hide grid' : 'Show grid' }}
+      </button>
+    </div>
     <div
       v-for="block in tree.body"
       :key="block.id"

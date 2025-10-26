@@ -54,7 +54,7 @@ Track all implementation tasks with their completion status.
 - [x] Coalesce nudges into single history step while key held
 
 ### M1.6 — Visual Aids (next)
-- [ ] Grid overlay toggle
+- [x] Grid overlay toggle
 - [ ] Selection rectangle and handle styling
 - [ ] Basic alignment guides (non-magnetic)
 
