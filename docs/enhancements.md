@@ -74,6 +74,7 @@ This document captures follow-up improvements after each implementation. Focus a
 14) Selection & Handles UX
 - Selection ring: thinner, higher-contrast ring with subtle offset and shadow for better visibility on light/dark content.
 - Handles: 6px size, hover scale, slightly stronger border on hover; positioned with half-size offsets to sit flush at edges.
+- Marquee: dashed border, повышенный контраст и лёгкая подложка для лучшей видимости на разном фоне.
 - Future: show handles only on hover when selected, and keyboard-focus outline for accessibility.
 
 15) Add Flow UX

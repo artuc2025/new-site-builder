@@ -590,7 +590,7 @@ function onKeyUp(e: KeyboardEvent) {
     </template>
     <div
       v-if="marqueeRect.visible"
-      class="absolute pointer-events-none border-2 border-blue-400/60 bg-blue-400/10"
+      class="absolute pointer-events-none border-2 border-dashed border-blue-500/70 bg-blue-500/10 rounded-sm"
       :style="{
         left: marqueeRect.x + 'px',
         top: marqueeRect.y + 'px',
