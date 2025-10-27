@@ -63,7 +63,7 @@ npm run dev:runtime  # Start runtime only
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
   - Performance: rAF throttle `pointermove`; ephemeral drag/resize preview
 
-➡️ Next micro-step: Show resize handles only on hover (fade in/out).
+➡️ Next micro-step: Improve selection rectangle styling (dashed, stronger contrast).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)

@@ -90,6 +90,14 @@ function getBlockStyle(block: any) {
   return base
 }
 
+function handlesVisible(block: any): boolean {
+  if (editor.selectedBlockIds.length !== 1 || editor.selectedBlockIds[0] !== block.id) return false
+  if (editor.hoveredBlockId === block.id) return true
+  const rz = (editor as any)._resize
+  if (editor.interactionMode === 'resize' && rz && rz.blockId === block.id) return true
+  return false
+}
+
 const componentMap = {
   Hero,
   Text,
@@ -558,15 +566,17 @@ function onKeyUp(e: KeyboardEvent) {
           <component :is="() => renderBlock(block)" />
         </div>
         <template v-if="editor.selectedBlockIds.length === 1 && editor.selectedBlockIds[0] === block.id">
-          <!-- resize handles -->
+          <!-- resize handles (hover-only with fade) -->
           <div class="absolute inset-0 pointer-events-none">
-            <div
-              v-for="dir in ['n','s','e','w','ne','nw','se','sw']"
-              :key="dir"
-              class="pointer-events-auto bg-white/95 border border-blue-500 rounded-sm shadow-sm transition-transform duration-100 hover:scale-125 hover:border-blue-600"
-              :style="handleStyle(dir)"
-              @pointerdown.stop="(e: PointerEvent) => onResizeHandleDown(dir as string, block, e)"
-            />
+            <transition-group name="handles" tag="div">
+              <div
+                v-for="dir in handlesVisible(block) ? ['n','s','e','w','ne','nw','se','sw'] : []"
+                :key="dir"
+                class="pointer-events-auto bg-white/95 border border-blue-500 rounded-sm shadow-sm transition-transform duration-100 hover:scale-125 hover:border-blue-600"
+                :style="handleStyle(dir)"
+                @pointerdown.stop="(e: PointerEvent) => onResizeHandleDown(dir as string, block, e)"
+              />
+            </transition-group>
           </div>
         </template>
       </div>

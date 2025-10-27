@@ -1,3 +1,6 @@
+/* Fade in/out for resize handles */
+.handles-enter-active, .handles-leave-active { transition: opacity 120ms ease; }
+.handles-enter-from, .handles-leave-to { opacity: 0; }
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
