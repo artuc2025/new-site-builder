@@ -63,7 +63,7 @@ npm run dev:runtime  # Start runtime only
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
   - UI toggles: Snap toggle + threshold, Guides toggle
 
-➡️ Next micro-step: Ephemeral handles on hover (polish), then HiDPI/zoom.
+➡️ Next micro-step: HiDPI/zoom correctness (normalize pointer coords, scale-aware snap/guides).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)

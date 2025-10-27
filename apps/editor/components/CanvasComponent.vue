@@ -647,3 +647,12 @@ function onKeyUp(e: KeyboardEvent) {
   </div>
 </template>
 
+<style scoped>
+.handles-enter-active, .handles-leave-active {
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+.handles-enter-from, .handles-leave-to {
+  opacity: 0;
+}
+</style>
+
