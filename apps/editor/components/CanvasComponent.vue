@@ -308,8 +308,8 @@ function onPointerMove(e: PointerEvent) {
         if (Math.abs(selMaxY - oB) <= tol) hy.push(oB)
         if (Math.abs(selCY - oM) <= tol) hy.push(oM)
       }
-      // de-duplicate; show guides only when snapping is enabled
-      if (editor.snapEnabled) {
+      // de-duplicate; show guides only when guides are enabled and snapping is on
+      if (editor.snapEnabled && editor.guidesEnabled) {
         guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
         guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
       } else {
@@ -566,6 +566,14 @@ function onKeyUp(e: KeyboardEvent) {
         :class="editor.snapEnabled ? 'border-emerald-400 text-emerald-700 bg-emerald-50' : ''"
       >
         {{ editor.snapEnabled ? 'Snap: On' : 'Snap: Off' }}
+      </button>
+      <button
+        class="ml-2 px-2 py-1 text-xs bg-white/80 border border-gray-300 rounded shadow-sm hover:bg-white"
+        @pointerdown.stop
+        @click.stop="editor.toggleGuides()"
+        :class="editor.guidesEnabled ? 'border-indigo-400 text-indigo-700 bg-indigo-50' : ''"
+      >
+        {{ editor.guidesEnabled ? 'Guides: On' : 'Guides: Off' }}
       </button>
       <label class="ml-2 inline-flex items-center gap-1 text-xs bg-white/80 border border-gray-300 rounded px-2 py-1 shadow-sm">
         <span>Threshold</span>

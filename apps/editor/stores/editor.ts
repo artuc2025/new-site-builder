@@ -25,7 +25,8 @@ export const useEditorStore = defineStore('editor', {
     idToIndex: {} as Record<string, number>,
     previewMode: false as boolean,
     snapEnabled: true as boolean,
-    snapThreshold: 5 as number
+    snapThreshold: 5 as number,
+    guidesEnabled: true as boolean
   }),
 
   actions: {
@@ -34,6 +35,12 @@ export const useEditorStore = defineStore('editor', {
     },
     toggleSnap() {
       this.snapEnabled = !this.snapEnabled
+    },
+    setGuidesEnabled(enabled: boolean) {
+      ;(this as any).guidesEnabled = !!enabled
+    },
+    toggleGuides() {
+      ;(this as any).guidesEnabled = !(this as any).guidesEnabled
     },
     setSnapThreshold(px: number) {
       const v = Math.max(0, Math.min(32, Math.round(px)))

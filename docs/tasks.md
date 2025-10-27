@@ -154,7 +154,7 @@ Plan:
 
 - [x] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
 - [x] Snap threshold control (`snapThreshold`, default: 5–8px)
-- [ ] Guides toggle (`guidesEnabled`, default: on)
+- [x] Guides toggle (`guidesEnabled`, default: on)
 - [x] Throttle pointermove with `requestAnimationFrame`
 - [x] Ephemeral drag preview (commit on `pointerup`)
 - [x] Ephemeral resize preview (commit on `pointerup`)
@@ -197,6 +197,19 @@ Notes:
 - Драг многоблокового выделения уважает текущий порог.
 - Ресайз уважает текущий порог.
 - Переключение Snap Off игнорирует порог (нет направляющих/магнитизма).
+
+### Manual Test Checklist — Guides Toggle
+
+1) Default On:
+- При перетаскивании подсвечиваются направляющие; магнитизм зависит от Snap и порога.
+
+2) Toggle Off:
+- Кнопка «Guides: Off» скрывает линии направляющих при drag/resize.
+- Магнитизм (притяжение) остаётся активным, если Snap On (визуальные линии скрыты, логика прилипания работает).
+
+3) Сценарии:
+- Мультивыделение: направляющие учитывают bbox выделения при On; скрыты при Off.
+- Preview mode: направляющие скрыты.
 
 ## 🔐 M6 — Authentication
 

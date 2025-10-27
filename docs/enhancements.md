@@ -87,6 +87,10 @@ This document captures follow-up improvements after each implementation. Focus a
 - Future: snapping (magnetism) with threshold, guide prioritization, and toggle.
  - Enabled basic magnetism: blocks snap to nearest guide within 5px.
 
+17) Guides Visibility vs Magnetism
+- Развязать визуальные направляющие и магнитизм: `guidesEnabled` управляет только отрисовкой линий, а `snapEnabled` и `snapThreshold` — логикой прилипания.
+- Пользователь может скрывать линии, сохраняя выравнивание по сетке/направляющим.
+
 ### Migration Plan (small steps)
 - Step 1: Introduce pure helpers and switch callers.
 - Step 2: Drag preview state + commit on release.
