@@ -63,7 +63,7 @@ npm run dev:runtime  # Start runtime only
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
   - UI toggles: Snap toggle + threshold, Guides toggle
 
-➡️ Next micro-step: Snap threshold control in canvas toolbar (`snapThreshold`).
+➡️ Next micro-step: Guides toggle in canvas toolbar (`guidesEnabled`).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)

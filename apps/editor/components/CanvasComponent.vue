@@ -266,8 +266,8 @@ function onPointerMove(e: PointerEvent) {
           }
         })
 
-      // Compute simple non-magnetic alignment guides (within 5px) against other blocks
-      const tol = 5
+      // Compute simple non-magnetic alignment guides (within threshold) against other blocks
+      const tol = Math.max(0, editor.snapThreshold || 0)
       const selectedIds = new Set(editor.selectedBlockIds)
       const movingRects = drag.initialFrames
         .filter((f: any) => f.frame)
@@ -318,7 +318,7 @@ function onPointerMove(e: PointerEvent) {
       }
 
       // Magnetic snapping to closest guide (within threshold)
-      const threshold = 5
+      const threshold = Math.max(0, editor.snapThreshold || 0)
       let snapDx = 0
       let snapDy = 0
       if (others.length && editor.snapEnabled) {
@@ -567,6 +567,21 @@ function onKeyUp(e: KeyboardEvent) {
       >
         {{ editor.snapEnabled ? 'Snap: On' : 'Snap: Off' }}
       </button>
+      <label class="ml-2 inline-flex items-center gap-1 text-xs bg-white/80 border border-gray-300 rounded px-2 py-1 shadow-sm">
+        <span>Threshold</span>
+        <input
+          type="number"
+          min="0"
+          max="32"
+          step="1"
+          :value="editor.snapThreshold"
+          class="w-14 px-1 py-0.5 border rounded text-xs"
+          @pointerdown.stop
+          @click.stop
+          @change="(e: any) => editor.setSnapThreshold(parseInt(e.target.value || '0', 10))"
+        />
+        <span>px</span>
+      </label>
     </div>
     <div
       v-for="block in tree.body"

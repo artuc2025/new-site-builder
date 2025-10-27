@@ -24,7 +24,8 @@ export const useEditorStore = defineStore('editor', {
     breakpoint: 'lg' as 'lg' | 'md' | 'sm',
     idToIndex: {} as Record<string, number>,
     previewMode: false as boolean,
-    snapEnabled: true as boolean
+    snapEnabled: true as boolean,
+    snapThreshold: 5 as number
   }),
 
   actions: {
@@ -33,6 +34,10 @@ export const useEditorStore = defineStore('editor', {
     },
     toggleSnap() {
       this.snapEnabled = !this.snapEnabled
+    },
+    setSnapThreshold(px: number) {
+      const v = Math.max(0, Math.min(32, Math.round(px)))
+      this.snapThreshold = v
     },
     setPreviewMode(enabled: boolean) {
       this.interactionMode = 'idle'

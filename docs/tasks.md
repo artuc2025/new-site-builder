@@ -153,7 +153,7 @@ Plan:
 ## 🔁 Next 10 Micro-steps (M1 Polish)
 
 - [x] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
-- [ ] Snap threshold control (`snapThreshold`, default: 5–8px)
+- [x] Snap threshold control (`snapThreshold`, default: 5–8px)
 - [ ] Guides toggle (`guidesEnabled`, default: on)
 - [x] Throttle pointermove with `requestAnimationFrame`
 - [x] Ephemeral drag preview (commit on `pointerup`)
@@ -183,6 +183,20 @@ Notes:
 - Multi-select drag respects toggle state (no guides/snaps when Off).
 - Keyboard nudges remain 1px/10px (toggle does not affect keyboard).
 - Preview mode disables toolbar effects on interactions.
+
+### Manual Test Checklist — Snap Threshold
+
+1) Defaults:
+- Значение по умолчанию 5px; направляющие и прилипания срабатывают в пределах 5px.
+
+2) Изменение значения:
+- Установить 0: никакого магнитного прилипания к направляющим.
+- Установить 8/12: зона прилипания ощутимо шире, проще «поймать» выравнивание.
+
+3) Сценарии:
+- Драг многоблокового выделения уважает текущий порог.
+- Ресайз уважает текущий порог.
+- Переключение Snap Off игнорирует порог (нет направляющих/магнитизма).
 
 ## 🔐 M6 — Authentication
 
