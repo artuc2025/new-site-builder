@@ -163,6 +163,7 @@ Plan:
 - [ ] Maintain `id → index` map in store for O(1) lookups
  - [x] Maintain `id → index` map in store for O(1) lookups
 - [ ] Preview mode toggle (re‑enable pointer events/links)
+ - [x] Preview mode toggle (re‑enable pointer events/links)
 
 Notes:
 - Keep each change minimal and shippable; update `docs/enhancements.md` after each.

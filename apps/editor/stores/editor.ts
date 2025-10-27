@@ -22,10 +22,21 @@ export const useEditorStore = defineStore('editor', {
     history: [] as PageTree[],
     historyIndex: -1 as number,
     breakpoint: 'lg' as 'lg' | 'md' | 'sm',
-    idToIndex: {} as Record<string, number>
+    idToIndex: {} as Record<string, number>,
+    previewMode: false as boolean
   }),
 
   actions: {
+    setPreviewMode(enabled: boolean) {
+      this.interactionMode = 'idle'
+      this.selectedId = null
+      this.selectedBlockIds = []
+      this.previewMode = enabled
+    },
+    togglePreviewMode() {
+      const next = !this.previewMode
+      this.setPreviewMode(next)
+    },
     rebuildIdIndexMap() {
       const map: Record<string, number> = {}
       ;(this.tree.body as any[]).forEach((b: any, i: number) => {

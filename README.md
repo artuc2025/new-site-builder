@@ -63,7 +63,7 @@ npm run dev:runtime  # Start runtime only
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
   - Performance: rAF throttle `pointermove`; ephemeral drag/resize preview
 
-➡️ Next micro-step: Preview mode toggle (re‑enable pointer events/links).
+➡️ Next micro-step: Snap toggle in canvas toolbar (`snapEnabled`).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)

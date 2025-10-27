@@ -15,17 +15,24 @@
       <div class="flex items-center gap-2">
         <button
           @click="undo"
-          :disabled="!canUndo"
+          :disabled="!canUndo || editor.previewMode"
           class="px-4 py-2 border rounded hover:bg-gray-50 disabled:opacity-50"
         >
           Undo
         </button>
         <button
           @click="redo"
-          :disabled="!canRedo"
+          :disabled="!canRedo || editor.previewMode"
           class="px-4 py-2 border rounded hover:bg-gray-50 disabled:opacity-50"
         >
           Redo
+        </button>
+        <button
+          @click="togglePreview"
+          class="px-4 py-2 border rounded hover:bg-gray-50"
+          :class="editor.previewMode ? 'bg-emerald-50 border-emerald-300 text-emerald-700' : ''"
+        >
+          {{ editor.previewMode ? 'Exit Preview' : 'Preview' }}
         </button>
         <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Publish
@@ -53,7 +60,15 @@
       <!-- Canvas -->
       <main class="flex-1 bg-gray-50 overflow-auto editor-canvas">
         <div class="max-w-6xl mx-auto p-8 min-h-full bg-white">
-          <CanvasComponent v-if="editor.tree" :tree="editor.tree" />
+          <div class="relative">
+            <CanvasComponent v-if="editor.tree" :tree="editor.tree" />
+            <div
+              v-if="editor.previewMode"
+              class="absolute top-2 left-1/2 -translate-x-1/2 z-[10001] px-3 py-1 rounded-full bg-emerald-600 text-white text-xs shadow"
+            >
+              Preview
+            </div>
+          </div>
         </div>
       </main>
 
@@ -87,6 +102,13 @@ const availableBlocks = getAllBlockConfigs()
 // Initialize history on mount
 onMounted(() => {
   editor.initHistory()
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key.toLowerCase() === 'p' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault()
+      editor.togglePreviewMode()
+    }
+  }
+  window.addEventListener('keydown', onKey)
 })
 
 const canUndo = computed(() => editor.canUndo)
@@ -102,6 +124,10 @@ function redo() {
 
 function addBlock(type: string) {
   editor.addBlock(type)
+}
+
+function togglePreview() {
+  editor.togglePreviewMode()
 }
 </script>
 

@@ -188,6 +188,7 @@ function selectWithRules(id: string, shiftKey: boolean) {
 }
 
 function onPointerDown(e: PointerEvent) {
+  if (editor.previewMode) return
   const root = (e.currentTarget as HTMLElement)
   // focus canvas for keyboard handling
   root.focus()
@@ -226,6 +227,7 @@ function onPointerDown(e: PointerEvent) {
 }
 
 function onPointerMove(e: PointerEvent) {
+  if (editor.previewMode) return
   lastClientX = e.clientX
   lastClientY = e.clientY
   if (rafPending) return
@@ -426,6 +428,7 @@ function onPointerMove(e: PointerEvent) {
   })
 }
 function onPointerUp(e: PointerEvent) {
+  if (editor.previewMode) return
   const root = (e.currentTarget as HTMLElement)
   try {
     root.releasePointerCapture(e.pointerId)
@@ -470,6 +473,7 @@ function onPointerUp(e: PointerEvent) {
 }
 
 function onKeyDown(e: KeyboardEvent) {
+  if (editor.previewMode) return
   const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
   if (e.key === 'Escape') {
     editor.clearSelection()
@@ -515,6 +519,7 @@ function onKeyDown(e: KeyboardEvent) {
 }
 
 function onKeyUp(e: KeyboardEvent) {
+  if (editor.previewMode) return
   const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight']
   if (!arrowKeys.includes(e.key)) return
   if ((editor as any)._nudgeActive) {
@@ -555,14 +560,14 @@ function onKeyUp(e: KeyboardEvent) {
       <div
         class="w-full h-full transition-shadow"
         :class="{
-          'ring-1 ring-blue-500/80 ring-offset-2 ring-offset-white shadow-[0_0_0_1px_rgba(59,130,246,0.6)]': editor.selectedBlockIds.includes(block.id),
-          'ring-1 ring-blue-400/60': !editor.selectedBlockIds.includes(block.id) && editor.hoveredBlockId === block.id
+          'ring-1 ring-blue-500/80 ring-offset-2 ring-offset-white shadow-[0_0_0_1px_rgba(59,130,246,0.6)]': !editor.previewMode && editor.selectedBlockIds.includes(block.id),
+          'ring-1 ring-blue-400/60': !editor.previewMode && !editor.selectedBlockIds.includes(block.id) && editor.hoveredBlockId === block.id
         }"
-        @mouseenter="() => editor.setHovered(block.id)"
-        @mouseleave="() => editor.setHovered(null)"
-        @click.stop.prevent="(e) => selectWithRules(block.id, e.shiftKey)"
+        @mouseenter="() => { if (!editor.previewMode) editor.setHovered(block.id) }"
+        @mouseleave="() => { if (!editor.previewMode) editor.setHovered(null) }"
+        @click.stop.prevent="(e) => { if (!editor.previewMode) selectWithRules(block.id, e.shiftKey) }"
       >
-        <div class="pointer-events-none select-none">
+        <div :class="editor.previewMode ? '' : 'pointer-events-none select-none'">
           <component :is="() => renderBlock(block)" />
         </div>
         <template v-if="editor.selectedBlockIds.length === 1 && editor.selectedBlockIds[0] === block.id">
