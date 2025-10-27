@@ -60,13 +60,33 @@ npm run dev:runtime  # Start runtime only
 
 - Finish M1 gaps in `apps/editor`:
   - Keyboard: coalesced nudges while key is held
-  - Helpers/selectors: `getBlockById`, `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
+  - Helpers/selectors: `coalesceHistory`
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
+
+### Next 10 Micro-steps
+- Snap toggle in canvas toolbar (default on)
+- Snap threshold control (default 5–8px)
+- Guides toggle (default on)
+- Throttle pointermove with requestAnimationFrame
+- Ephemeral drag preview; commit on pointerup
+- Ephemeral resize preview; commit on pointerup
+- Show resize handles only on hover
+- Improve selection rectangle styling
+- Maintain id→index map in store
+- Preview mode toggle (re-enable pointer events)
 - M2: Inline text editing (TipTap) for Text/Hero blocks
 - M3: Page persistence (API contracts, Prisma service, CRUD; connect editor)
 - DX: add `.env.example` for API, add runtime URL here, unify scripts
 
 Suggested default: close remaining M1 items, then start M2 while drafting M3 contracts.
+
+### Priority 1 (M1 Edge Cases)
+- HiDPI/zoom correctness: introduce canvas scale/zoom, transform pointer coords to world space; make snap/grid/guides scale-aware; verify at DPR 1.25/1.5/2.
+- Media/iframes overlay during interactions to prevent event stealing.
+- Performance with 200+ blocks: rAF throttle pointermove; ephemeral drag/resize preview; id→index map; benchmark and watch FPS/jank.
+- Helpers/history: implement `coalesceHistory` util, avoid empty steps.
+- Toggles after stabilization: Snap toggle + threshold, Guides toggle, Preview mode.
+- Seed/backfill (last): add `frame`/`zIndex` to seeds/existing pages.
 
 ## 📋 M1 — Drag & Drop Canvas (no external libs)
 

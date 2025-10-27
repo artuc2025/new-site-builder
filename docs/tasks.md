@@ -12,7 +12,7 @@ Track all implementation tasks with their completion status.
 - [x] Resize handles (N,S,E,W,NE,NW,SE,SW) with min-size
 - [x] Marquee selection (rubber-band) on empty canvas drag
 - [x] Keyboard: arrows (1px) and Shift+arrows (10px), Delete, Esc
-- [ ] Visual aids: grid overlay toggle, selection rect and handles
+ - [x] Visual aids: grid overlay toggle, selection rect and handles
 - [x] Undo/redo: coalesce during interaction, commit on end
 - [ ] Edge cases: high-DPI scaling, iframes overlay, 200+ blocks perf
 
@@ -23,7 +23,9 @@ Track all implementation tasks with their completion status.
 - [x] Update editor store state to include `selectedBlockIds`, `hoveredBlockId`, `interactionMode`
 - [x] Add selectors: `getBlockById`
 - [x] Add selectors: `getTopmostAtPoint`, `getBlocksInRect`
-- [ ] Add util helpers: `snapToGrid(8)`, `clampToCanvas`, `coalesceHistory`
+ - [x] Add util helper: `snapToGrid(8)`
+ - [x] Add util helper: `clampToCanvas`
+ - [ ] Add util helper: `coalesceHistory`
 - [x] Ensure Immer-based immutable updates for move/resize primitives
 - [ ] Backfill existing pages/seed to include `frame` and `zIndex`
 
@@ -63,6 +65,14 @@ Track all implementation tasks with their completion status.
 - [ ] Interaction overlay for media/iframes
 - [ ] Perf sanity with 200+ blocks
 - [x] Smoke test: render frames in canvas positioning (no interactions yet)
+
+Plan:
+- Introduce canvas scale/zoom and world coordinates; normalize pointer coords; make snap/grid/guides scale‑aware. Validate at DPR 1.25/1.5/2.
+- Add interaction overlay for media/iframes during drag/resize/marquee to prevent event stealing.
+- Performance for ≥200 blocks: rAF throttle pointermove; ephemeral preview for drag/resize; maintain id→index map; benchmark jank/FPS.
+- Helpers/history: implement `coalesceHistory` util and drop empty steps.
+- Toggles & UX after stabilization: Snap toggle + threshold, Guides toggle, Preview mode.
+- Seed/backfill last: add `frame`/`zIndex` to seeds/existing pages after stabilization.
 
 **Status**: In progress  
 **Exit Criteria**: Blocks can be selected, dragged and resized with 8px snapping; keyboard nudging works; undo/redo preserves interactions without extra steps
@@ -139,6 +149,23 @@ Track all implementation tasks with their completion status.
 **Exit Criteria**: Images upload to storage, accessible in editor/runtime
 
 ---
+
+## 🔁 Next 10 Micro-steps (M1 Polish)
+
+- [ ] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
+- [ ] Snap threshold control (`snapThreshold`, default: 5–8px)
+- [ ] Guides toggle (`guidesEnabled`, default: on)
+- [ ] Throttle pointermove with `requestAnimationFrame`
+- [ ] Ephemeral drag preview (commit on `pointerup`)
+- [ ] Ephemeral resize preview (commit on `pointerup`)
+- [ ] Show resize handles only on hover (fade in/out)
+- [ ] Improve selection rectangle styling (dashed, stronger contrast)
+- [ ] Maintain `id → index` map in store for O(1) lookups
+- [ ] Preview mode toggle (re‑enable pointer events/links)
+
+Notes:
+- Keep each change minimal and shippable; update `docs/enhancements.md` after each.
+- Default behaviors should match current UX unless explicitly toggled.
 
 ## 🔐 M6 — Authentication
 
