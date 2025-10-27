@@ -245,10 +245,12 @@ function onPointerMove(e: PointerEvent) {
       if (!drag) return
       let dx = x - drag.start.x
       let dy = y - drag.start.y
-      // Snap deltas to 8px grid
-      const grid = 8
-      dx = snapToGrid(dx, grid)
-      dy = snapToGrid(dy, grid)
+      // Snap deltas to 8px grid (if enabled)
+      if (editor.snapEnabled) {
+        const grid = 8
+        dx = snapToGrid(dx, grid)
+        dy = snapToGrid(dy, grid)
+      }
       // Apply absolute positions based on initial frames to avoid compounding
       let updates = drag.initialFrames
         .filter((f: any) => f.frame)
@@ -306,15 +308,20 @@ function onPointerMove(e: PointerEvent) {
         if (Math.abs(selMaxY - oB) <= tol) hy.push(oB)
         if (Math.abs(selCY - oM) <= tol) hy.push(oM)
       }
-      // de-duplicate
-      guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
-      guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
+      // de-duplicate; show guides only when snapping is enabled
+      if (editor.snapEnabled) {
+        guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
+        guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
+      } else {
+        guideXs.value = []
+        guideYs.value = []
+      }
 
       // Magnetic snapping to closest guide (within threshold)
       const threshold = 5
       let snapDx = 0
       let snapDy = 0
-      if (others.length) {
+      if (others.length && editor.snapEnabled) {
         // compute best X snap (match left/right/center to other's left/right/center)
         let bestXDist = Number.POSITIVE_INFINITY
         let bestXDelta = 0
@@ -362,7 +369,7 @@ function onPointerMove(e: PointerEvent) {
         if (bestYDist !== Number.POSITIVE_INFINITY) snapDy = bestYDelta
       }
 
-      if (snapDx !== 0 || snapDy !== 0) {
+      if (editor.snapEnabled && (snapDx !== 0 || snapDy !== 0)) {
         // apply snap deltas and re-clamp per block
         updates = updates.map((u: any) => {
           const base = (drag.initialFrames as any[]).find(ff => ff.id === u.id)
@@ -395,8 +402,10 @@ function onPointerMove(e: PointerEvent) {
       const rz = (editor as any)._resize
       if (!rz || !rz.baseFrame) return
       const grid = 8
-      const dx = snapToGrid(x - rz.start.x, grid)
-      const dy = snapToGrid(y - rz.start.y, grid)
+      const dxRaw = x - rz.start.x
+      const dyRaw = y - rz.start.y
+      const dx = editor.snapEnabled ? snapToGrid(dxRaw, grid) : dxRaw
+      const dy = editor.snapEnabled ? snapToGrid(dyRaw, grid) : dyRaw
       let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
       if (rz.dir.includes('e')) {
         bw = Math.max(32, bw + dx)
@@ -549,6 +558,14 @@ function onKeyUp(e: KeyboardEvent) {
         @click.stop="showGrid = !showGrid"
       >
         {{ showGrid ? 'Hide grid' : 'Show grid' }}
+      </button>
+      <button
+        class="ml-2 px-2 py-1 text-xs bg-white/80 border border-gray-300 rounded shadow-sm hover:bg-white"
+        @pointerdown.stop
+        @click.stop="editor.toggleSnap()"
+        :class="editor.snapEnabled ? 'border-emerald-400 text-emerald-700 bg-emerald-50' : ''"
+      >
+        {{ editor.snapEnabled ? 'Snap: On' : 'Snap: Off' }}
       </button>
     </div>
     <div

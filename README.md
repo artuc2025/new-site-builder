@@ -61,23 +61,20 @@ npm run dev:runtime  # Start runtime only
 - Finish M1 polish in `apps/editor`:
   - Helpers: `coalesceHistory` util
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
-  - Performance: rAF throttle `pointermove`; ephemeral drag/resize preview
+  - UI toggles: Snap toggle + threshold, Guides toggle
 
-➡️ Next micro-step: Snap toggle in canvas toolbar (`snapEnabled`).
+➡️ Next micro-step: Snap threshold control in canvas toolbar (`snapThreshold`).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)
 - Snap threshold control (default 5–8px)
 - Guides toggle (default on)
-- Throttle pointermove with requestAnimationFrame
-- Ephemeral drag preview; commit on pointerup
-- Ephemeral resize preview; commit on pointerup
-- Show resize handles only on hover
-- Improve selection rectangle styling
-- Maintain id→index map in store
-- Preview mode toggle (re-enable pointer events)
-- M2: Inline text editing (TipTap) for Text/Hero blocks
-- M3: Page persistence (API contracts, Prisma service, CRUD; connect editor)
+- HiDPI/zoom: normalize pointer coords; scale-aware snapping and guides
+- Interaction overlay for media/iframes during drag/resize/marquee
+- Implement `coalesceHistory` util to compress history steps
+- Benchmark ≥200 blocks; tune rendering and rAF cadence
+- Seed/backfill existing pages with `frame` and `zIndex`
+- Scale-aware guides density/visibility across zoom levels
 - DX: add `.env.example` for API, add runtime URL here, unify scripts
 
 Suggested default: close remaining M1 items, then start M2 while drafting M3 contracts.

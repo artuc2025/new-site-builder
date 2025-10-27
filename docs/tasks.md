@@ -152,7 +152,7 @@ Plan:
 
 ## 🔁 Next 10 Micro-steps (M1 Polish)
 
-- [ ] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
+- [x] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
 - [ ] Snap threshold control (`snapThreshold`, default: 5–8px)
 - [ ] Guides toggle (`guidesEnabled`, default: on)
 - [x] Throttle pointermove with `requestAnimationFrame`
@@ -168,6 +168,21 @@ Plan:
 Notes:
 - Keep each change minimal and shippable; update `docs/enhancements.md` after each.
 - Default behaviors should match current UX unless explicitly toggled.
+
+### Manual Test Checklist — Snap Toggle
+
+1) Default On:
+- Add a block; drag it. Movement snaps to 8px; guides appear near other blocks.
+- Resize a block; edges snap to 8px.
+
+2) Toggle Off:
+- Click “Snap: On” to turn Off. Drag: movement is pixel-perfect, no guides.
+- Resize: smooth pixel changes, no 8px rounding.
+
+3) Edge Cases:
+- Multi-select drag respects toggle state (no guides/snaps when Off).
+- Keyboard nudges remain 1px/10px (toggle does not affect keyboard).
+- Preview mode disables toolbar effects on interactions.
 
 ## 🔐 M6 — Authentication
 

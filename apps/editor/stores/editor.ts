@@ -23,10 +23,17 @@ export const useEditorStore = defineStore('editor', {
     historyIndex: -1 as number,
     breakpoint: 'lg' as 'lg' | 'md' | 'sm',
     idToIndex: {} as Record<string, number>,
-    previewMode: false as boolean
+    previewMode: false as boolean,
+    snapEnabled: true as boolean
   }),
 
   actions: {
+    setSnapEnabled(enabled: boolean) {
+      this.snapEnabled = enabled
+    },
+    toggleSnap() {
+      this.snapEnabled = !this.snapEnabled
+    },
     setPreviewMode(enabled: boolean) {
       this.interactionMode = 'idle'
       this.selectedId = null
