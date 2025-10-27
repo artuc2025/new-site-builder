@@ -47,6 +47,9 @@ let lastClientY = 0
 // Ephemeral drag preview positions (absolute positions per block id)
 const dragPreview = ref<Record<string, { x: number; y: number }>>({})
 
+// Ephemeral resize preview rects (absolute rects per block id)
+const resizePreview = ref<Record<string, { x: number; y: number; width: number; height: number }>>({})
+
 function getPreviewTransform(block: any): string | undefined {
   if (editor.interactionMode !== 'drag') return undefined
   const prev = dragPreview.value[block.id]
@@ -55,6 +58,36 @@ function getPreviewTransform(block: any): string | undefined {
   const dy = (prev.y ?? block.frame.y) - block.frame.y
   if (dx === 0 && dy === 0) return undefined
   return `translate(${dx}px, ${dy}px)`
+}
+
+function getBlockStyle(block: any) {
+  const base: Record<string, string> = {
+    left: (block.frame?.x ?? 0) + 'px',
+    top: (block.frame?.y ?? 0) + 'px',
+    width: (block.frame?.width ?? 0) + 'px',
+    height: (block.frame?.height ?? 0) + 'px',
+    zIndex: String(block.zIndex ?? 0)
+  }
+  const rprev = resizePreview.value[block.id]
+  if (rprev && block?.frame) {
+    const dx = rprev.x - block.frame.x
+    const dy = rprev.y - block.frame.y
+    base.width = rprev.width + 'px'
+    base.height = rprev.height + 'px'
+    if (dx !== 0 || dy !== 0) {
+      base.transform = `translate(${dx}px, ${dy}px)`
+    }
+    return base
+  }
+  const dprev = dragPreview.value[block.id]
+  if (dprev && block?.frame) {
+    const dx = dprev.x - block.frame.x
+    const dy = dprev.y - block.frame.y
+    if (dx !== 0 || dy !== 0) {
+      base.transform = `translate(${dx}px, ${dy}px)`
+    }
+  }
+  return base
 }
 
 const componentMap = {
@@ -355,7 +388,6 @@ function onPointerMove(e: PointerEvent) {
       const dx = snapToGrid(x - rz.start.x, grid)
       const dy = snapToGrid(y - rz.start.y, grid)
       let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
-      // adjust based on handle direction
       if (rz.dir.includes('e')) {
         bw = Math.max(32, bw + dx)
       }
@@ -374,13 +406,14 @@ function onPointerMove(e: PointerEvent) {
         by = Math.max(0, by - deltaH)
         bh = newH
       }
-      // clamp to canvas bounds on right/bottom
       const maxX = Math.max(0, rect.width - bw)
       const maxY = Math.max(0, rect.height - bh)
       bx = clampToCanvas(bx, 0, maxX)
       by = clampToCanvas(by, 0, maxY)
-      // apply immutably via store
-      editor.setFrameRect(rz.blockId, { x: bx, y: by, width: bw, height: bh })
+      resizePreview.value = {
+        ...resizePreview.value,
+        [rz.blockId]: { x: bx, y: by, width: bw, height: bh }
+      }
     }
   })
 }
@@ -418,6 +451,12 @@ function onPointerUp(e: PointerEvent) {
     }
     marqueeRect.value = { x: 0, y: 0, width: 0, height: 0, visible: false }
   } else if (wasResize) {
+    const entries = Object.entries(resizePreview.value)
+    if (entries.length) {
+      const [id, rect] = entries[0]
+      editor.setFrameRect(id, rect as any)
+    }
+    resizePreview.value = {}
     editor.addToHistory()
   }
 }
@@ -503,14 +542,7 @@ function onKeyUp(e: KeyboardEvent) {
       v-for="block in tree.body"
       :key="block.id"
       class="absolute"
-      :style="{
-        left: block.frame?.x + 'px',
-        top: block.frame?.y + 'px',
-        width: block.frame?.width + 'px',
-        height: block.frame?.height + 'px',
-        zIndex: String(block.zIndex ?? 0),
-        transform: getPreviewTransform(block)
-      }"
+      :style="getBlockStyle(block)"
     >
       <div
         class="w-full h-full transition-shadow"

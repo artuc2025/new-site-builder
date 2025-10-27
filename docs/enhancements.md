@@ -55,6 +55,7 @@ This document captures follow-up improvements after each implementation. Focus a
  - Added Delete/Esc keyboard handling; consider debounced delete confirmation for multi-select to avoid accidental removal.
  - Applied rAF throttling for `@pointermove` in `CanvasComponent.vue`: keep last pointer coords, gate updates with `requestAnimationFrame`, compute guides and snapping once per frame. Observed smoother drag and fewer store writes.
  - Implemented ephemeral drag preview: during drag we only update a local `dragPreview` map and render via `transform: translate(...)`; on `pointerup` commit absolute frames once and push a single history step.
+ - Implemented ephemeral resize preview: during resize, compute clamped/snapped rect each frame into `resizePreview` and render size/position live; commit final rect on `pointerup`.
 
 11) Focus & Pointer Interop in Editor
 - Wrapped rendered block content with `pointer-events: none` and `select-none` in the editor canvas to prevent inner links/controls (e.g., Hero CTA) from stealing focus.
