@@ -161,6 +161,7 @@ Plan:
 - [x] Show resize handles only on hover (fade in/out)
 - [x] Improve selection rectangle styling (dashed, stronger contrast)
 - [ ] Maintain `id → index` map in store for O(1) lookups
+ - [x] Maintain `id → index` map in store for O(1) lookups
 - [ ] Preview mode toggle (re‑enable pointer events/links)
 
 Notes:

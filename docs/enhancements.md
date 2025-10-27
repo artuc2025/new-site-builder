@@ -48,6 +48,7 @@ This document captures follow-up improvements after each implementation. Focus a
 9) Selector Performance
 - `getBlockById` getter currently performs a linear search through `tree.body`.
 - For large pages, consider maintaining an `id -> index` map in store state, updating on add/remove/reorder. This reduces lookups to O(1) and simplifies multi-selection operations.
+ - Adopted: introduced `idToIndex` map in editor store; rebuilds on undo/redo/delete; updates on add. Callers now use O(1) lookup paths.
 
 10) Adoption Status
 - Introduced `snapToGrid(value, grid=8)` in `apps/editor/composables/geometry.ts`.

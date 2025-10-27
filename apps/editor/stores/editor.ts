@@ -21,10 +21,18 @@ export const useEditorStore = defineStore('editor', {
     interactionMode: 'idle' as 'idle' | 'drag' | 'resize' | 'marquee',
     history: [] as PageTree[],
     historyIndex: -1 as number,
-    breakpoint: 'lg' as 'lg' | 'md' | 'sm'
+    breakpoint: 'lg' as 'lg' | 'md' | 'sm',
+    idToIndex: {} as Record<string, number>
   }),
 
   actions: {
+    rebuildIdIndexMap() {
+      const map: Record<string, number> = {}
+      ;(this.tree.body as any[]).forEach((b: any, i: number) => {
+        if (b && typeof (b as any).id === 'string') map[(b as any).id] = i
+      })
+      this.idToIndex = map
+    },
     initHistory() {
       // Initialize history with current state
       if (this.history.length === 0) {
@@ -42,6 +50,7 @@ export const useEditorStore = defineStore('editor', {
         remaining.forEach((b, i) => { (b as any).zIndex = i })
         ;(draft as any).body = remaining as any
       }))
+      this.rebuildIdIndexMap()
       this.clearSelection()
       this.addToHistory()
     },
@@ -75,6 +84,8 @@ export const useEditorStore = defineStore('editor', {
       this.tree = produce(this.tree, (draft) => {
         draft.body.push(block)
       })
+      // update id→index map
+      this.idToIndex[block.id] = (this.tree.body as any[]).length - 1
       // Auto-select newly added block and bring to front via zIndex
       this.selectBlock(block.id, false)
       this.addToHistory()
@@ -103,8 +114,9 @@ export const useEditorStore = defineStore('editor', {
     },
 
     updateBlockProps(id: string, props: Record<string, any>) {
+      const idx = this.idToIndex[id]
       this.tree = produce(this.tree, (draft => {
-        const block = draft.body.find((b) => b.id === id)
+        const block = Number.isInteger(idx) ? (draft.body as any[])[idx as any] : draft.body.find((b) => b.id === id)
         if (block) {
           block.props = { ...block.props, ...props }
         }
@@ -116,6 +128,7 @@ export const useEditorStore = defineStore('editor', {
       if (this.historyIndex > 0) {
         this.historyIndex--
         this.tree = JSON.parse(JSON.stringify(this.history[this.historyIndex]))
+        this.rebuildIdIndexMap()
       }
     },
 
@@ -123,6 +136,7 @@ export const useEditorStore = defineStore('editor', {
       if (this.historyIndex < this.history.length - 1) {
         this.historyIndex++
         this.tree = JSON.parse(JSON.stringify(this.history[this.historyIndex]))
+        this.rebuildIdIndexMap()
       }
     },
 
@@ -134,7 +148,8 @@ export const useEditorStore = defineStore('editor', {
       // Apply deltas to frames without touching history
       this.tree = produce(this.tree, (draft => {
         for (const { id, dx, dy } of deltas) {
-          const b = (draft.body as any[]).find(bb => bb.id === id)
+          const idx = this.idToIndex[id]
+          const b = Number.isInteger(idx) ? (draft.body as any[])[idx as any] : (draft.body as any[]).find(bb => bb.id === id)
           if (b && b.frame) {
             b.frame.x += dx
             b.frame.y += dy
@@ -146,7 +161,8 @@ export const useEditorStore = defineStore('editor', {
     setFramesAbsolute(updates: Array<{ id: string, x: number, y: number }>) {
       // Directly mutate for performance and to avoid Immer/Vue proxy issues
       for (const { id, x, y } of updates) {
-        const b = (this.tree.body as any[]).find(bb => bb.id === id)
+        const idx = this.idToIndex[id]
+        const b = Number.isInteger(idx) ? (this.tree.body as any[])[idx as any] : (this.tree.body as any[]).find(bb => bb.id === id)
         if (b && b.frame) {
           b.frame.x = x
           b.frame.y = y
@@ -156,7 +172,8 @@ export const useEditorStore = defineStore('editor', {
 
     setFrameRect(id: string, rect: { x?: number; y?: number; width?: number; height?: number }) {
       // Direct mutation to avoid Immer/Vue proxy conflicts during high-frequency updates
-      const b = (this.tree.body as any[]).find(bb => bb.id === id)
+      const idx = this.idToIndex[id]
+      const b = Number.isInteger(idx) ? (this.tree.body as any[])[idx as any] : (this.tree.body as any[]).find(bb => bb.id === id)
       if (b && b.frame) {
         if (typeof rect.x === 'number') b.frame.x = rect.x
         if (typeof rect.y === 'number') b.frame.y = rect.y
@@ -170,6 +187,8 @@ export const useEditorStore = defineStore('editor', {
     canUndo: (state) => state.historyIndex > 0,
     canRedo: (state) => state.historyIndex < state.history.length - 1,
     getBlockById: (state) => (id: string) => {
+      const idx = (state as any).idToIndex?.[id]
+      if (Number.isInteger(idx)) return (state.tree.body as any[])[idx as any] || null
       return (state.tree.body as any[]).find(b => (b as any).id === id) || null
     },
     getTopmostAtPoint: (state) => (x: number, y: number) => {
