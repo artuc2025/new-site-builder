@@ -58,10 +58,12 @@ npm run dev:runtime  # Start runtime only
 
 ## Next Up
 
-- Finish M1 gaps in `apps/editor`:
-  - Keyboard: coalesced nudges while key is held
-  - Helpers/selectors: `coalesceHistory`
+- Finish M1 polish in `apps/editor`:
+  - Helpers: `coalesceHistory` util
   - Edge cases & QA: HiDPI/zoom, iframe overlay, perf with 200+ blocks
+  - Performance: rAF throttle `pointermove`; ephemeral drag/resize preview
+
+➡️ Next micro-step: Ephemeral resize preview (same approach for resize; commit on pointerup).
 
 ### Next 10 Micro-steps
 - Snap toggle in canvas toolbar (default on)

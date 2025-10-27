@@ -155,8 +155,8 @@ Plan:
 - [ ] Snap toggle in canvas toolbar (`snapEnabled`, default: on)
 - [ ] Snap threshold control (`snapThreshold`, default: 5–8px)
 - [ ] Guides toggle (`guidesEnabled`, default: on)
-- [ ] Throttle pointermove with `requestAnimationFrame`
-- [ ] Ephemeral drag preview (commit on `pointerup`)
+- [x] Throttle pointermove with `requestAnimationFrame`
+- [x] Ephemeral drag preview (commit on `pointerup`)
 - [ ] Ephemeral resize preview (commit on `pointerup`)
 - [ ] Show resize handles only on hover (fade in/out)
 - [ ] Improve selection rectangle styling (dashed, stronger contrast)

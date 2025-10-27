@@ -39,6 +39,24 @@ function setGlobalUserSelect(disabled: boolean) {
 const guideXs = ref<number[]>([])
 const guideYs = ref<number[]>([])
 
+// rAF throttling state for pointermove
+let rafPending = false
+let lastClientX = 0
+let lastClientY = 0
+
+// Ephemeral drag preview positions (absolute positions per block id)
+const dragPreview = ref<Record<string, { x: number; y: number }>>({})
+
+function getPreviewTransform(block: any): string | undefined {
+  if (editor.interactionMode !== 'drag') return undefined
+  const prev = dragPreview.value[block.id]
+  if (!prev || !block?.frame) return undefined
+  const dx = (prev.x ?? block.frame.x) - block.frame.x
+  const dy = (prev.y ?? block.frame.y) - block.frame.y
+  if (dx === 0 && dy === 0) return undefined
+  return `translate(${dx}px, ${dy}px)`
+}
+
 const componentMap = {
   Hero,
   Text,
@@ -167,199 +185,204 @@ function onPointerDown(e: PointerEvent) {
 }
 
 function onPointerMove(e: PointerEvent) {
-  if (editor.interactionMode === 'drag') {
-    const root = (e.currentTarget as HTMLElement)
+  lastClientX = e.clientX
+  lastClientY = e.clientY
+  if (rafPending) return
+  rafPending = true
+  requestAnimationFrame(() => {
+    rafPending = false
+    const root = canvasRoot.value as HTMLElement | null
+    if (!root) return
     const rect = root.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const drag = (editor as any)._drag
-    if (!drag) return
-    let dx = x - drag.start.x
-    let dy = y - drag.start.y
-    // Snap deltas to 8px grid
-    const grid = 8
-    dx = snapToGrid(dx, grid)
-    dy = snapToGrid(dy, grid)
-    // Apply absolute positions based on initial frames to avoid compounding
-    let updates = drag.initialFrames
-      .filter((f: any) => f.frame)
-      .map((f: any) => {
-        const nx = f.frame.x + dx
-        const ny = f.frame.y + dy
-        const maxX = Math.max(0, rect.width - f.frame.width)
-        const maxY = Math.max(0, rect.height - f.frame.height)
-        return {
-          id: f.id,
-          x: clampToCanvas(nx, 0, maxX),
-          y: clampToCanvas(ny, 0, maxY)
-        }
-      })
+    const x = lastClientX - rect.left
+    const y = lastClientY - rect.top
 
-    // Compute simple non-magnetic alignment guides (within 5px) against other blocks
-    const tol = 5
-    const selectedIds = new Set(editor.selectedBlockIds)
-    const movingRects = drag.initialFrames
-      .filter((f: any) => f.frame)
-      .map((f: any) => {
-        const u = updates.find((uu: any) => uu.id === f.id)
-        const x = (u?.x ?? f.frame.x)
-        const y = (u?.y ?? f.frame.y)
-        return { x, y, width: f.frame.width, height: f.frame.height }
-      })
-    const selMinX = Math.min(...movingRects.map((r: any) => r.x))
-    const selMinY = Math.min(...movingRects.map((r: any) => r.y))
-    const selMaxX = Math.max(...movingRects.map((r: any) => r.x + r.width))
-    const selMaxY = Math.max(...movingRects.map((r: any) => r.y + r.height))
-    const selCX = (selMinX + selMaxX) / 2
-    const selCY = (selMinY + selMaxY) / 2
+    if (editor.interactionMode === 'drag') {
+      const drag = (editor as any)._drag
+      if (!drag) return
+      let dx = x - drag.start.x
+      let dy = y - drag.start.y
+      // Snap deltas to 8px grid
+      const grid = 8
+      dx = snapToGrid(dx, grid)
+      dy = snapToGrid(dy, grid)
+      // Apply absolute positions based on initial frames to avoid compounding
+      let updates = drag.initialFrames
+        .filter((f: any) => f.frame)
+        .map((f: any) => {
+          const nx = f.frame.x + dx
+          const ny = f.frame.y + dy
+          const maxX = Math.max(0, rect.width - f.frame.width)
+          const maxY = Math.max(0, rect.height - f.frame.height)
+          return {
+            id: f.id,
+            x: clampToCanvas(nx, 0, maxX),
+            y: clampToCanvas(ny, 0, maxY)
+          }
+        })
 
-    const others = (editor.tree.body as any[]).filter(b => !selectedIds.has((b as any).id) && (b as any).frame)
-    const vx: number[] = []
-    const hy: number[] = []
-    for (const ob of others) {
-      const f = (ob as any).frame
-      const oL = f.x
-      const oR = f.x + f.width
-      const oC = f.x + f.width / 2
-      const oT = f.y
-      const oB = f.y + f.height
-      const oM = f.y + f.height / 2
-      // vertical guides (match x)
-      if (Math.abs(selMinX - oL) <= tol) vx.push(oL)
-      if (Math.abs(selMinX - oR) <= tol) vx.push(oR)
-      if (Math.abs(selMaxX - oL) <= tol) vx.push(oL)
-      if (Math.abs(selMaxX - oR) <= tol) vx.push(oR)
-      if (Math.abs(selCX - oC) <= tol) vx.push(oC)
-      // horizontal guides (match y)
-      if (Math.abs(selMinY - oT) <= tol) hy.push(oT)
-      if (Math.abs(selMinY - oB) <= tol) hy.push(oB)
-      if (Math.abs(selMaxY - oT) <= tol) hy.push(oT)
-      if (Math.abs(selMaxY - oB) <= tol) hy.push(oB)
-      if (Math.abs(selCY - oM) <= tol) hy.push(oM)
-    }
-    // de-duplicate
-    guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
-    guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
+      // Compute simple non-magnetic alignment guides (within 5px) against other blocks
+      const tol = 5
+      const selectedIds = new Set(editor.selectedBlockIds)
+      const movingRects = drag.initialFrames
+        .filter((f: any) => f.frame)
+        .map((f: any) => {
+          const u = updates.find((uu: any) => uu.id === f.id)
+          const rx = (u?.x ?? f.frame.x)
+          const ry = (u?.y ?? f.frame.y)
+          return { x: rx, y: ry, width: f.frame.width, height: f.frame.height }
+        })
+      const selMinX = Math.min(...movingRects.map((r: any) => r.x))
+      const selMinY = Math.min(...movingRects.map((r: any) => r.y))
+      const selMaxX = Math.max(...movingRects.map((r: any) => r.x + r.width))
+      const selMaxY = Math.max(...movingRects.map((r: any) => r.y + r.height))
+      const selCX = (selMinX + selMaxX) / 2
+      const selCY = (selMinY + selMaxY) / 2
 
-    // Magnetic snapping to closest guide (within threshold)
-    const threshold = 5
-    let snapDx = 0
-    let snapDy = 0
-    if (others.length) {
-      // compute best X snap (match left/right/center to other's left/right/center)
-      let bestXDist = Number.POSITIVE_INFINITY
-      let bestXDelta = 0
-      for (const ob of others as any[]) {
+      const others = (editor.tree.body as any[]).filter(b => !selectedIds.has((b as any).id) && (b as any).frame)
+      const vx: number[] = []
+      const hy: number[] = []
+      for (const ob of others) {
         const f = (ob as any).frame
-        const candidates: Array<{target:number, current:number}> = [
-          { target: f.x, current: selMinX },
-          { target: f.x + f.width, current: selMinX },
-          { target: f.x, current: selMaxX },
-          { target: f.x + f.width, current: selMaxX },
-          { target: f.x + f.width / 2, current: selCX }
-        ]
-        for (const c of candidates) {
-          const delta = c.target - c.current
-          const dist = Math.abs(delta)
-          if (dist <= threshold && dist < bestXDist) {
-            bestXDist = dist
-            bestXDelta = delta
+        const oL = f.x
+        const oR = f.x + f.width
+        const oC = f.x + f.width / 2
+        const oT = f.y
+        const oB = f.y + f.height
+        const oM = f.y + f.height / 2
+        // vertical guides (match x)
+        if (Math.abs(selMinX - oL) <= tol) vx.push(oL)
+        if (Math.abs(selMinX - oR) <= tol) vx.push(oR)
+        if (Math.abs(selMaxX - oL) <= tol) vx.push(oL)
+        if (Math.abs(selMaxX - oR) <= tol) vx.push(oR)
+        if (Math.abs(selCX - oC) <= tol) vx.push(oC)
+        // horizontal guides (match y)
+        if (Math.abs(selMinY - oT) <= tol) hy.push(oT)
+        if (Math.abs(selMinY - oB) <= tol) hy.push(oB)
+        if (Math.abs(selMaxY - oT) <= tol) hy.push(oT)
+        if (Math.abs(selMaxY - oB) <= tol) hy.push(oB)
+        if (Math.abs(selCY - oM) <= tol) hy.push(oM)
+      }
+      // de-duplicate
+      guideXs.value = Array.from(new Set(vx.map(v => Math.round(v))))
+      guideYs.value = Array.from(new Set(hy.map(v => Math.round(v))))
+
+      // Magnetic snapping to closest guide (within threshold)
+      const threshold = 5
+      let snapDx = 0
+      let snapDy = 0
+      if (others.length) {
+        // compute best X snap (match left/right/center to other's left/right/center)
+        let bestXDist = Number.POSITIVE_INFINITY
+        let bestXDelta = 0
+        for (const ob of others as any[]) {
+          const f = (ob as any).frame
+          const candidates: Array<{target:number, current:number}> = [
+            { target: f.x, current: selMinX },
+            { target: f.x + f.width, current: selMinX },
+            { target: f.x, current: selMaxX },
+            { target: f.x + f.width, current: selMaxX },
+            { target: f.x + f.width / 2, current: selCX }
+          ]
+          for (const c of candidates) {
+            const delta = c.target - c.current
+            const dist = Math.abs(delta)
+            if (dist <= threshold && dist < bestXDist) {
+              bestXDist = dist
+              bestXDelta = delta
+            }
           }
         }
-      }
-      if (bestXDist !== Number.POSITIVE_INFINITY) snapDx = bestXDelta
+        if (bestXDist !== Number.POSITIVE_INFINITY) snapDx = bestXDelta
 
-      // compute best Y snap (match top/bottom/middle)
-      let bestYDist = Number.POSITIVE_INFINITY
-      let bestYDelta = 0
-      for (const ob of others as any[]) {
-        const f = (ob as any).frame
-        const candidates: Array<{target:number, current:number}> = [
-          { target: f.y, current: selMinY },
-          { target: f.y + f.height, current: selMinY },
-          { target: f.y, current: selMaxY },
-          { target: f.y + f.height, current: selMaxY },
-          { target: f.y + f.height / 2, current: selCY }
-        ]
-        for (const c of candidates) {
-          const delta = c.target - c.current
-          const dist = Math.abs(delta)
-          if (dist <= threshold && dist < bestYDist) {
-            bestYDist = dist
-            bestYDelta = delta
+        // compute best Y snap (match top/bottom/middle)
+        let bestYDist = Number.POSITIVE_INFINITY
+        let bestYDelta = 0
+        for (const ob of others as any[]) {
+          const f = (ob as any).frame
+          const candidates: Array<{target:number, current:number}> = [
+            { target: f.y, current: selMinY },
+            { target: f.y + f.height, current: selMinY },
+            { target: f.y, current: selMaxY },
+            { target: f.y + f.height, current: selMaxY },
+            { target: f.y + f.height / 2, current: selCY }
+          ]
+          for (const c of candidates) {
+            const delta = c.target - c.current
+            const dist = Math.abs(delta)
+            if (dist <= threshold && dist < bestYDist) {
+              bestYDist = dist
+              bestYDelta = delta
+            }
           }
         }
+        if (bestYDist !== Number.POSITIVE_INFINITY) snapDy = bestYDelta
       }
-      if (bestYDist !== Number.POSITIVE_INFINITY) snapDy = bestYDelta
-    }
 
-    if (snapDx !== 0 || snapDy !== 0) {
-      // apply snap deltas and re-clamp per block
-      updates = updates.map((u: any) => {
-        const base = (drag.initialFrames as any[]).find(ff => ff.id === u.id)
-        const width = base?.frame?.width ?? 0
-        const height = base?.frame?.height ?? 0
-        const maxX = Math.max(0, rect.width - width)
-        const maxY = Math.max(0, rect.height - height)
-        return {
-          id: u.id,
-          x: clampToCanvas(u.x + snapDx, 0, maxX),
-          y: clampToCanvas(u.y + snapDy, 0, maxY)
-        }
-      })
+      if (snapDx !== 0 || snapDy !== 0) {
+        // apply snap deltas and re-clamp per block
+        updates = updates.map((u: any) => {
+          const base = (drag.initialFrames as any[]).find(ff => ff.id === u.id)
+          const width = base?.frame?.width ?? 0
+          const height = base?.frame?.height ?? 0
+          const maxX = Math.max(0, rect.width - width)
+          const maxY = Math.max(0, rect.height - height)
+          return {
+            id: u.id,
+            x: clampToCanvas(u.x + snapDx, 0, maxX),
+            y: clampToCanvas(u.y + snapDy, 0, maxY)
+          }
+        })
+      }
+      // Update ephemeral preview positions instead of mutating the store
+      const nextPreview: Record<string, { x: number; y: number }> = {}
+      for (const u of updates as any[]) {
+        nextPreview[u.id] = { x: u.x, y: u.y }
+      }
+      dragPreview.value = nextPreview
+    } else if (editor.interactionMode === 'marquee') {
+      const mq = (editor as any)._marquee
+      if (!mq) return
+      const left = Math.min(mq.start.x, x)
+      const top = Math.min(mq.start.y, y)
+      const width = Math.abs(x - mq.start.x)
+      const height = Math.abs(y - mq.start.y)
+      marqueeRect.value = { x: left, y: top, width, height, visible: true }
+    } else if (editor.interactionMode === 'resize') {
+      const rz = (editor as any)._resize
+      if (!rz || !rz.baseFrame) return
+      const grid = 8
+      const dx = snapToGrid(x - rz.start.x, grid)
+      const dy = snapToGrid(y - rz.start.y, grid)
+      let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
+      // adjust based on handle direction
+      if (rz.dir.includes('e')) {
+        bw = Math.max(32, bw + dx)
+      }
+      if (rz.dir.includes('s')) {
+        bh = Math.max(32, bh + dy)
+      }
+      if (rz.dir.includes('w')) {
+        const newW = Math.max(32, bw - dx)
+        const deltaW = newW - bw
+        bx = Math.max(0, bx - deltaW)
+        bw = newW
+      }
+      if (rz.dir.includes('n')) {
+        const newH = Math.max(32, bh - dy)
+        const deltaH = newH - bh
+        by = Math.max(0, by - deltaH)
+        bh = newH
+      }
+      // clamp to canvas bounds on right/bottom
+      const maxX = Math.max(0, rect.width - bw)
+      const maxY = Math.max(0, rect.height - bh)
+      bx = clampToCanvas(bx, 0, maxX)
+      by = clampToCanvas(by, 0, maxY)
+      // apply immutably via store
+      editor.setFrameRect(rz.blockId, { x: bx, y: by, width: bw, height: bh })
     }
-    editor.setFramesAbsolute(updates)
-  } else if (editor.interactionMode === 'marquee') {
-    const root = (e.currentTarget as HTMLElement)
-    const rect = root.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const mq = (editor as any)._marquee
-    if (!mq) return
-    const left = Math.min(mq.start.x, x)
-    const top = Math.min(mq.start.y, y)
-    const width = Math.abs(x - mq.start.x)
-    const height = Math.abs(y - mq.start.y)
-    marqueeRect.value = { x: left, y: top, width, height, visible: true }
-    
-  } else if (editor.interactionMode === 'resize') {
-    const root = (e.currentTarget as HTMLElement)
-    const rect = root.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-    const rz = (editor as any)._resize
-    if (!rz || !rz.baseFrame) return
-    const grid = 8
-    const dx = snapToGrid(x - rz.start.x, grid)
-    const dy = snapToGrid(y - rz.start.y, grid)
-    let { x: bx, y: by, width: bw, height: bh } = rz.baseFrame
-    // adjust based on handle direction
-    if (rz.dir.includes('e')) {
-      bw = Math.max(32, bw + dx)
-    }
-    if (rz.dir.includes('s')) {
-      bh = Math.max(32, bh + dy)
-    }
-    if (rz.dir.includes('w')) {
-      const newW = Math.max(32, bw - dx)
-      const deltaW = newW - bw
-      bx = Math.max(0, bx - deltaW)
-      bw = newW
-    }
-    if (rz.dir.includes('n')) {
-      const newH = Math.max(32, bh - dy)
-      const deltaH = newH - bh
-      by = Math.max(0, by - deltaH)
-      bh = newH
-    }
-    // clamp to canvas bounds on right/bottom
-    const maxX = Math.max(0, rect.width - bw)
-    const maxY = Math.max(0, rect.height - bh)
-    bx = clampToCanvas(bx, 0, maxX)
-    by = clampToCanvas(by, 0, maxY)
-    // apply immutably via store
-    editor.setFrameRect(rz.blockId, { x: bx, y: by, width: bw, height: bh })
-  }
+  })
 }
 function onPointerUp(e: PointerEvent) {
   const root = (e.currentTarget as HTMLElement)
@@ -377,6 +400,12 @@ function onPointerUp(e: PointerEvent) {
   guideXs.value = []
   guideYs.value = []
   if (wasDragging) {
+    // Commit the ephemeral preview to the store as a single history step
+    const updates = Object.entries(dragPreview.value).map(([id, pos]) => ({ id, x: pos.x, y: pos.y }))
+    if (updates.length) {
+      editor.setFramesAbsolute(updates as any)
+    }
+    dragPreview.value = {}
     editor.addToHistory()
   } else if (wasMarquee) {
     const r = marqueeRect.value
@@ -479,7 +508,8 @@ function onKeyUp(e: KeyboardEvent) {
         top: block.frame?.y + 'px',
         width: block.frame?.width + 'px',
         height: block.frame?.height + 'px',
-        zIndex: String(block.zIndex ?? 0)
+        zIndex: String(block.zIndex ?? 0),
+        transform: getPreviewTransform(block)
       }"
     >
       <div
