@@ -66,6 +66,27 @@ Track all implementation tasks with their completion status.
 - [ ] Perf sanity with 200+ blocks
 - [x] Smoke test: render frames in canvas positioning (no interactions yet)
 
+#### HiDPI/Zoom — Advanced Plan (no libs)
+
+- [x] Add `canvasScale` state (number, default 1.0) and zoom controls (+/−, fit)
+- [ ] Track `scrollLeft/Top` and bounding rect; compute world coords from client coords
+- [x] Normalize pointer coords: `(client - rect) / canvasScale`
+- [ ] Make `snapToGrid` grid size and guides tolerant to scale (constant world 8px)
+- [ ] Adjust marquee/select logic to world coords
+- [ ] Render grid overlay scale-aware (keep 8px world spacing)
+- [ ] Scale-aware handle positions/sizes (constant screen px)
+- [ ] Keep magnetic guides in world space; render lines at screen positions
+- [ ] Keyboard nudges operate in world px; clamp correctly at any zoom
+- [ ] Ensure rAF throttling uses last normalized pointer coords
+- [ ] Persist `canvasScale` in session (optional)
+- [ ] Add zoom presets (25/50/75/100/200%) and Ctrl/Cmd +/−/0 hotkeys
+- [ ] Validate at DPR 1.25/1.5/2.0; cross-browser (Chrome/Firefox)
+
+Implementation Notes:
+- Use a single source of truth for scale and scroll; avoid duplicating math
+- Prefer pure helpers: `toWorld(client, rect, scale)`, `toScreen(world, rect, scale)`
+- Ensure selection ring and handles stay crisp (subpixel rounding)
+
 Plan:
 - Introduce canvas scale/zoom and world coordinates; normalize pointer coords; make snap/grid/guides scale‑aware. Validate at DPR 1.25/1.5/2.
 - Add interaction overlay for media/iframes during drag/resize/marquee to prevent event stealing.
@@ -168,6 +189,26 @@ Plan:
 Notes:
 - Keep each change minimal and shippable; update `docs/enhancements.md` after each.
 - Default behaviors should match current UX unless explicitly toggled.
+
+### Manual QA Checklist — HiDPI/Zoom
+
+1) Pointer and selection:
+- При разных масштабах (50/100/200%) курсор попадает по блокам корректно.
+- Маркировочная рамка соответствует движению мыши и выделяет те же блоки.
+
+2) Drag/resize/snapping:
+- Перетаскивание и ресайз сохраняют 8px «мировую» сетку независимо от масштаба.
+- Магнитные направляющие срабатывают в пределах порога по миру, визуально совпадают.
+
+3) Клавиатура:
+- Стрелки двигают на 1px мира (Shift — 10px) на любом зуме.
+
+4) Визуал:
+- Сетка выглядит одинаково плотной на 50/100/200% (без «жирных» линий).
+- Хэндлы и рамка выбора читаемы и не дрожат.
+
+5) Стабильность:
+- rAF‑тротлинг не приводит к пропускам; нет рывков при быстрых движениях.
 
 ## 🔐 M6 — Authentication
 

@@ -193,8 +193,9 @@ function onPointerDown(e: PointerEvent) {
   // focus canvas for keyboard handling
   root.focus()
   const rect = root.getBoundingClientRect()
-  const x = e.clientX - rect.left
-  const y = e.clientY - rect.top
+  const scale = (editor as any).canvasScale || 1
+  const x = (e.clientX - rect.left) / scale
+  const y = (e.clientY - rect.top) / scale
   const hit = (editor as any).getTopmostAtPoint(x, y)
   if (hit && hit.id) {
     selectWithRules(hit.id, e.shiftKey)
@@ -237,8 +238,9 @@ function onPointerMove(e: PointerEvent) {
     const root = canvasRoot.value as HTMLElement | null
     if (!root) return
     const rect = root.getBoundingClientRect()
-    const x = lastClientX - rect.left
-    const y = lastClientY - rect.top
+    const scale = (editor as any).canvasScale || 1
+    const x = (lastClientX - rect.left) / scale
+    const y = (lastClientY - rect.top) / scale
 
     if (editor.interactionMode === 'drag') {
       const drag = (editor as any)._drag
@@ -252,13 +254,15 @@ function onPointerMove(e: PointerEvent) {
         dy = snapToGrid(dy, grid)
       }
       // Apply absolute positions based on initial frames to avoid compounding
+      const worldW = rect.width / scale
+      const worldH = rect.height / scale
       let updates = drag.initialFrames
         .filter((f: any) => f.frame)
         .map((f: any) => {
           const nx = f.frame.x + dx
           const ny = f.frame.y + dy
-          const maxX = Math.max(0, rect.width - f.frame.width)
-          const maxY = Math.max(0, rect.height - f.frame.height)
+          const maxX = Math.max(0, worldW - f.frame.width)
+          const maxY = Math.max(0, worldH - f.frame.height)
           return {
             id: f.id,
             x: clampToCanvas(nx, 0, maxX),
@@ -375,8 +379,8 @@ function onPointerMove(e: PointerEvent) {
           const base = (drag.initialFrames as any[]).find(ff => ff.id === u.id)
           const width = base?.frame?.width ?? 0
           const height = base?.frame?.height ?? 0
-          const maxX = Math.max(0, rect.width - width)
-          const maxY = Math.max(0, rect.height - height)
+          const maxX = Math.max(0, worldW - width)
+          const maxY = Math.max(0, worldH - height)
           return {
             id: u.id,
             x: clampToCanvas(u.x + snapDx, 0, maxX),
@@ -425,8 +429,8 @@ function onPointerMove(e: PointerEvent) {
         by = Math.max(0, by - deltaH)
         bh = newH
       }
-      const maxX = Math.max(0, rect.width - bw)
-      const maxY = Math.max(0, rect.height - bh)
+    const maxX = Math.max(0, (rect.width / scale) - bw)
+    const maxY = Math.max(0, (rect.height / scale) - bh)
       bx = clampToCanvas(bx, 0, maxX)
       by = clampToCanvas(by, 0, maxY)
       resizePreview.value = {
@@ -509,13 +513,14 @@ function onKeyDown(e: KeyboardEvent) {
 
   // Compute absolute updates with clamping to canvas bounds
   const rect = canvasRoot.value?.getBoundingClientRect()
+  const scale = (editor as any).canvasScale || 1
   const updates = editor.selectedBlockIds.map((id: string) => {
     const b = (editor.tree.body as any[]).find(bb => bb.id === id)
     const bx = (b?.frame?.x ?? 0) + dx
     const by = (b?.frame?.y ?? 0) + dy
     if (rect && b?.frame) {
-      const maxX = Math.max(0, rect.width - b.frame.width)
-      const maxY = Math.max(0, rect.height - b.frame.height)
+      const maxX = Math.max(0, (rect.width / scale) - b.frame.width)
+      const maxY = Math.max(0, (rect.height / scale) - b.frame.height)
       return { id, x: clampToCanvas(bx, 0, maxX), y: clampToCanvas(by, 0, maxY) }
     }
     return { id, x: clampToCanvas(bx, 0, Number.MAX_SAFE_INTEGER), y: clampToCanvas(by, 0, Number.MAX_SAFE_INTEGER) }
@@ -590,13 +595,21 @@ function onKeyUp(e: KeyboardEvent) {
         />
         <span>px</span>
       </label>
+      <label class="ml-2 inline-flex items-center gap-1 text-xs bg-white/80 border border-gray-300 rounded px-2 py-1 shadow-sm">
+        <span>Zoom</span>
+        <button class="px-2 py-0.5 border rounded text-xs" @pointerdown.stop @click.stop="editor.zoomOut(0.25)">-</button>
+        <span class="px-1 w-10 text-center">{{ Math.round(editor.canvasScale * 100) }}%</span>
+        <button class="px-2 py-0.5 border rounded text-xs" @pointerdown.stop @click.stop="editor.zoomIn(0.25)">+</button>
+        <button class="ml-1 px-2 py-0.5 border rounded text-xs" @pointerdown.stop @click.stop="editor.zoomReset()">100%</button>
+      </label>
     </div>
-    <div
-      v-for="block in tree.body"
-      :key="block.id"
-      class="absolute"
-      :style="getBlockStyle(block)"
-    >
+    <div class="origin-top-left" :style="{ transform: 'scale(' + editor.canvasScale + ')', transformOrigin: 'top left' }">
+      <div
+        v-for="block in tree.body"
+        :key="block.id"
+        class="absolute"
+        :style="getBlockStyle(block)"
+      >
       <div
         class="w-full h-full transition-shadow"
         :class="{
@@ -628,10 +641,10 @@ function onKeyUp(e: KeyboardEvent) {
     </div>
     <!-- Alignment guides -->
     <template v-for="gx in guideXs" :key="'gx-'+gx">
-      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ left: gx + 'px', top: '0', width: '1px', height: '100%', zIndex: '9998' }" />
+      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ left: (gx * editor.canvasScale) + 'px', top: '0', width: '1px', height: '100%', zIndex: '9998' }" />
     </template>
     <template v-for="gy in guideYs" :key="'gy-'+gy">
-      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ top: gy + 'px', left: '0', height: '1px', width: '100%', zIndex: '9998' }" />
+      <div class="absolute pointer-events-none bg-rose-500/80" :style="{ top: (gy * editor.canvasScale) + 'px', left: '0', height: '1px', width: '100%', zIndex: '9998' }" />
     </template>
     <div
       v-if="marqueeRect.visible"
@@ -644,6 +657,7 @@ function onKeyUp(e: KeyboardEvent) {
         zIndex: '9999'
       }"
     />
+  </div>
   </div>
 </template>
 

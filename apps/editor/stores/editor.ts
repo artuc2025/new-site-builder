@@ -26,10 +26,26 @@ export const useEditorStore = defineStore('editor', {
     previewMode: false as boolean,
     snapEnabled: true as boolean,
     snapThreshold: 5 as number,
-    guidesEnabled: true as boolean
+    guidesEnabled: true as boolean,
+    canvasScale: 1 as number
   }),
 
   actions: {
+    setCanvasScale(scale: number) {
+      const min = 0.25
+      const max = 3
+      const next = Math.min(max, Math.max(min, Number(scale) || 1))
+      ;(this as any).canvasScale = next
+    },
+    zoomIn(step = 0.1) {
+      this.setCanvasScale(((this as any).canvasScale || 1) + step)
+    },
+    zoomOut(step = 0.1) {
+      this.setCanvasScale(((this as any).canvasScale || 1) - step)
+    },
+    zoomReset() {
+      this.setCanvasScale(1)
+    },
     setSnapEnabled(enabled: boolean) {
       this.snapEnabled = enabled
     },
