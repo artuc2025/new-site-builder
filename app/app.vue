@@ -29,30 +29,32 @@
       <ProductSection
         title="duolingo english test"
         description="Our convenient, fast, and affordable English test integrates the latest assessment science and AI — empowering anyone to accurately test their English where and when they're at their best."
-        cta-text="Certify your English"
+        cta-text="LEARN MORE"
         cta-url="https://englishtest.duolingo.com/en"
         illustration="product-1"
       />
       <ProductSection
         title="duolingo for schools"
         description="Teachers, we're here to help you! Our free tools support your students as they learn languages through the Duolingo app, both in and out of the classroom."
-        cta-text="Get your class started"
+        cta-text="LEARN MORE"
         cta-url="https://schools.duolingo.com"
         illustration="product-2"
+        :reverse="true"
       />
       <ProductSection
         title="duolingo abc"
         description="From language to literacy! With fun phonics lessons and delightful stories, Duolingo ABC helps kids ages 3–8 learn to read and write — 100% free."
-        cta-text="Learn more about ABC"
+        cta-text="LEARN MORE"
         cta-url="/abc"
         illustration="product-3"
       />
       <ProductSection
         title="duolingo math"
         description="Our free, bite-sized approach — but for math! Fun lessons help students get ahead in their math classes, while adults can brain train to boost their mental math skills."
-        cta-text="Get better at Math"
+        cta-text="LEARN MORE"
         cta-url="https://blog.duolingo.com/duolingo-launches-math-app"
         illustration="product-4"
+        :reverse="true"
       />
       <FinalCtaSection />
     </main>

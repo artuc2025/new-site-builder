@@ -1,11 +1,11 @@
 <template>
   <section class="product-section">
-    <div class="product-section__container">
+    <div class="product-section__container" :class="`product-section__container--${reverse ? 'reverse' : 'normal'}`">
       <div class="product-section__content">
         <h2 class="product-section__title">{{ title }}</h2>
         <p class="product-section__description">{{ description }}</p>
         <a :href="ctaUrl" class="product-section__cta">
-          {{ ctaText }}
+          LEARN MORE
         </a>
       </div>
       <div class="product-section__illustration">
@@ -24,10 +24,12 @@ interface Props {
   ctaText: string
   ctaUrl?: string
   illustration: string
+  reverse?: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   ctaUrl: '#',
+  reverse: false
 })
 </script>
 
@@ -43,6 +45,14 @@ withDefaults(defineProps<Props>(), {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+
+    &--reverse {
+      direction: rtl;
+
+      > * {
+        direction: ltr;
+      }
+    }
   }
 
   &__content {
@@ -68,20 +78,21 @@ withDefaults(defineProps<Props>(), {
   &__cta {
     display: inline-block;
     padding: 1rem 2rem;
-    background-color: #ffffff;
-    color: #58cc02;
-    border: 2px solid #58cc02;
+    background-color: #1cb0f6;
+    color: #ffffff;
+    border: none;
     border-radius: 16px;
     font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
+    text-transform: uppercase;
     transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
     font-family: 'Nunito', sans-serif;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      background-color: #f5f5f5;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background-color: #0a9dd6;
     }
   }
 

@@ -7,10 +7,10 @@
         </div>
       </div>
       <div class="super-duolingo-section__content">
-        <p class="super-duolingo-section__subtitle">AD FREE WITH</p>
+        <p class="super-duolingo-section__subtitle">AD FREE. UNLIMITED.</p>
         <h2 class="super-duolingo-section__title">SUPER DUOLINGO</h2>
         <button class="super-duolingo-section__cta">
-          Try 1 week free
+          LEARN MORE
         </button>
       </div>
     </div>
