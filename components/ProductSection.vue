@@ -5,7 +5,7 @@
         <h2 class="product-section__title">{{ title }}</h2>
         <p class="product-section__description">{{ description }}</p>
         <a :href="ctaUrl" class="product-section__cta">
-          LEARN MORE
+          {{ ctaText }}
         </a>
       </div>
       <div class="product-section__illustration">
@@ -85,7 +85,6 @@ withDefaults(defineProps<Props>(), {
     font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
-    text-transform: uppercase;
     transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
     font-family: 'Nunito', sans-serif;
 

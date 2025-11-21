@@ -313,5 +313,224 @@ Based on screenshot analysis, here are the key differences identified:
 
 ---
 
-**Last Updated:** Super Duolingo section updated, Product section buttons changed to blue with "LEARN MORE" text, reverse layouts added to product sections
+### ✅ Latest Updates (Iteration 5)
+
+1. **Hero Section Subheading Added** ✅
+   - Added missing subheading: "Learn 40+ languages with bite-sized lessons based on science."
+   - Styled with appropriate font size (1.125rem) and spacing
+
+2. **Super Duolingo Section Updates** ✅
+   - Changed subtitle from "AD FREE. UNLIMITED." to "POWER UP WITH" to match original
+   - Changed title "SUPER DUOLINGO" from solid green to gradient text (green → blue → purple)
+   - Changed button text from "LEARN MORE" back to "Try 1 week free" to match original
+   - Fixed button text color to dark (#1a1a1a) for visibility on white background
+
+### 📸 Latest Screenshots
+
+- **Original:** `.playwright-mcp/original-duolingo-latest.png` ✅ Captured
+- **Current v8:** `.playwright-mcp/current-implementation-v8.png` ✅ Captured (after hero subheading and Super Duolingo fixes)
+
+### 🔍 Visual Comparison Results (v8)
+
+#### ✅ What's Working Well
+1. **Hero Section** - Subheading now matches original ✅
+2. **Super Duolingo Section** - Subtitle, gradient title, and button text now match original ✅
+3. **Component Structure** - All sections present and properly structured ✅
+4. **Typography** - Font sizes and weights are appropriate ✅
+
+#### ❌ Remaining Differences
+
+1. **Illustrations**
+   - All illustrations remain as gradient placeholders
+   - Hero section needs actual character illustration with Duo and other characters
+   - Feature section illustrations need specific character designs
+   - Product section illustrations need specific designs
+   - Super Duolingo phone illustration needs actual design
+
+2. **Typography & Spacing**
+   - Font sizes may need fine-tuning to match exact original
+   - Line heights and letter spacing to be verified
+   - Section padding may need pixel-perfect adjustment
+
+3. **Colors**
+   - Button blue color (#1cb0f6) needs verification against original
+   - Super Duolingo gradient colors need exact match
+   - Text colors and contrast ratios to be checked
+
+4. **Hero Section**
+   - Illustration placeholder needs to be replaced with actual character illustration
+   - Language flags row may need styling adjustments
+
+5. **Responsive Design**
+   - Mobile breakpoints not yet implemented
+   - Tablet layouts need to be added
+   - Grid layouts need responsive adjustments
+
+6. **Interactive Elements**
+   - Button hover states and transitions
+   - Language selector dropdown behavior
+   - Link hover effects
+
+### 🛠 Next Steps
+
+1. Replace gradient placeholders with actual illustrations (or source images)
+2. Fine-tune typography (sizes, weights, spacing) to match original exactly
+3. Extract and verify exact color values from original site
+4. Adjust spacing and padding to match pixel-perfect
+5. Add responsive breakpoints for mobile and tablet
+6. Implement proper hover states and animations
+7. Continue iteration until pixel-perfect match
+
+---
+
+### ✅ Latest Updates (Iteration 6)
+
+1. **Super Duolingo Section Description Added** ✅
+   - Added the description text: "Ad-free learning, unlimited Hearts, and more!"
+   - Styled with appropriate font size and spacing
+
+2. **Product Section Button Texts Updated** ✅
+   - ProductSection component now dynamically renders button text using the `ctaText` prop
+   - Removed hardcoded "LEARN MORE" text
+   - Updated app.vue with correct button texts for each product:
+     - "Certify your English" for Duolingo English Test
+     - "Get your class started" for Duolingo for Schools
+     - "Learn more about ABC" for Duolingo ABC
+     - "Get better at Math" for Duolingo Math
+
+3. **Hero Section Button Text Case Fixed** ✅
+   - Changed "Get started" to "GET STARTED" (uppercase) to match original
+
+### 📸 Latest Screenshots
+
+- **Original:** `.playwright-mcp/original-comparison-v9.png` ✅ Captured
+- **Current v9:** `.playwright-mcp/current-implementation-v9.png` ✅ Captured (after Super Duolingo description and product button text fixes)
+
+### 🔍 Visual Comparison Results (v9)
+
+#### ✅ What's Working Well
+1. **Super Duolingo Section** - Description text now matches original ✅
+2. **Product Section Buttons** - Button texts now match original exactly ✅
+3. **Hero Section** - Button text case matches original ✅
+4. **Component Structure** - All sections present and properly structured ✅
+
+#### ❌ Remaining Differences
+
+1. **Illustrations**
+   - All illustrations remain as gradient placeholders
+   - Hero section needs actual character illustration with Duo and other characters
+   - Feature section illustrations need specific character designs
+   - Product section illustrations need specific designs
+   - Super Duolingo phone illustration needs actual design
+
+2. **Typography & Spacing**
+   - Font sizes may need fine-tuning to match exact original
+   - Line heights and letter spacing to be verified
+   - Section padding may need pixel-perfect adjustment
+
+3. **Colors**
+   - Button blue color (#1cb0f6) needs verification against original
+   - Super Duolingo gradient colors need exact match
+   - Text colors and contrast ratios to be checked
+
+4. **Hero Section**
+   - Illustration placeholder needs to be replaced with actual character illustration
+   - Language flags row may need styling adjustments
+
+5. **Responsive Design**
+   - Mobile breakpoints not yet implemented
+   - Tablet layouts need to be added
+   - Grid layouts need responsive adjustments
+
+6. **Interactive Elements**
+   - Button hover states and transitions
+   - Language selector dropdown behavior
+   - Link hover effects
+
+### 🛠 Next Steps
+
+1. Replace gradient placeholders with actual illustrations (or source images)
+2. Fine-tune typography (sizes, weights, spacing) to match original exactly
+3. Extract and verify exact color values from original site
+4. Adjust spacing and padding to match pixel-perfect
+5. Add responsive breakpoints for mobile and tablet
+6. Implement proper hover states and animations
+7. Continue iteration until pixel-perfect match
+
+---
+
+### ✅ Latest Updates (Iteration 7)
+
+1. **Hero Section Button Text Fixed** ✅
+   - Changed button text from "GET STARTED" to "Get started" (not uppercase) to match original
+   - Removed `text-transform: uppercase` from primary button, kept it only for secondary button
+
+2. **Feature Sections Background Updated** ✅
+   - Changed background color from white (#ffffff) to light blue (#e8f4f8) to match original
+   - All four feature sections now have consistent light blue background
+
+3. **Mobile App Section Background Updated** ✅
+   - Changed background color from white (#ffffff) to light blue (#e8f4f8) to match original
+   - "Learn anytime, anywhere" section now matches the feature sections' background
+
+### 📸 Latest Screenshots
+
+- **Original:** `.playwright-mcp/original-duolingo-latest.png` ✅ Captured
+- **Current v10:** `.playwright-mcp/current-implementation-v10.png` ✅ Captured (after hero button text and background color fixes)
+
+### 🔍 Visual Comparison Results (v10)
+
+#### ✅ What's Working Well
+1. **Hero Section** - Button text case now matches original ✅
+2. **Feature Sections** - Light blue background now matches original ✅
+3. **Mobile App Section** - Light blue background now matches original ✅
+4. **Component Structure** - All sections present and properly structured ✅
+
+#### ❌ Remaining Differences
+
+1. **Illustrations**
+   - All illustrations remain as gradient placeholders
+   - Hero section needs actual character illustration with Duo and other characters
+   - Feature section illustrations need specific character designs
+   - Product section illustrations need specific designs
+   - Super Duolingo phone illustration needs actual design
+
+2. **Typography & Spacing**
+   - Font sizes may need fine-tuning to match exact original
+   - Line heights and letter spacing to be verified
+   - Section padding may need pixel-perfect adjustment
+
+3. **Colors**
+   - Light blue background color (#e8f4f8) needs verification against original exact color
+   - Button blue color (#1cb0f6) needs verification against original
+   - Super Duolingo gradient colors need exact match
+   - Text colors and contrast ratios to be checked
+
+4. **Hero Section**
+   - Illustration placeholder needs to be replaced with actual character illustration
+   - Language flags row may need styling adjustments
+
+5. **Responsive Design**
+   - Mobile breakpoints not yet implemented
+   - Tablet layouts need to be added
+   - Grid layouts need responsive adjustments
+
+6. **Interactive Elements**
+   - Button hover states and transitions
+   - Language selector dropdown behavior
+   - Link hover effects
+
+### 🛠 Next Steps
+
+1. Replace gradient placeholders with actual illustrations (or source images)
+2. Fine-tune typography (sizes, weights, spacing) to match original exactly
+3. Extract and verify exact color values from original site (especially light blue background)
+4. Adjust spacing and padding to match pixel-perfect
+5. Add responsive breakpoints for mobile and tablet
+6. Implement proper hover states and animations
+7. Continue iteration until pixel-perfect match
+
+---
+
+**Last Updated:** Hero button text case fixed, Feature sections and Mobile App section backgrounds changed to light blue
 **Next Step:** Replace illustration placeholders, fine-tune typography and spacing, extract exact colors, add responsive breakpoints

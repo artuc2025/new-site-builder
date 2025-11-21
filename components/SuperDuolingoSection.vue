@@ -7,10 +7,13 @@
         </div>
       </div>
       <div class="super-duolingo-section__content">
-        <p class="super-duolingo-section__subtitle">AD FREE. UNLIMITED.</p>
+        <p class="super-duolingo-section__subtitle">POWER UP WITH</p>
         <h2 class="super-duolingo-section__title">SUPER DUOLINGO</h2>
+        <p class="super-duolingo-section__description">
+          Ad-free learning, unlimited Hearts, and more!
+        </p>
         <button class="super-duolingo-section__cta">
-          LEARN MORE
+          Try 1 week free
         </button>
       </div>
     </div>
@@ -68,10 +71,21 @@
   &__title {
     font-size: 2.5rem;
     font-weight: 700;
-    margin: 0 0 2rem 0;
-    color: #58cc02;
+    margin: 0 0 1rem 0;
+    background: linear-gradient(135deg, #58cc02 0%, #1cb0f6 50%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     font-family: 'Nunito', sans-serif;
     text-transform: uppercase;
+  }
+
+  &__description {
+    font-size: 1rem;
+    font-weight: 400;
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
+    opacity: 0.95;
   }
 
   &__cta {

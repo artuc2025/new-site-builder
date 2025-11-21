@@ -9,6 +9,9 @@
       <h1 class="hero__headline">
         The free, fun, and effective way to learn a language!
       </h1>
+      <p class="hero__subheading">
+        Learn 40+ languages with bite-sized lessons based on science.
+      </p>
       <div class="hero__cta-group">
         <a href="/register" class="hero__cta hero__cta--primary">
           Get started
@@ -68,8 +71,17 @@ import LanguageFlags from './LanguageFlags.vue';
     font-size: 1.875rem;
     font-weight: 700;
     color: #1a1a1a;
-    margin: 0 0 2rem 0;
+    margin: 0 0 1rem 0;
     line-height: 1.3;
+    font-family: 'Nunito', sans-serif;
+  }
+
+  &__subheading {
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: #1a1a1a;
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
     font-family: 'Nunito', sans-serif;
   }
 
@@ -88,7 +100,6 @@ import LanguageFlags from './LanguageFlags.vue';
     font-size: 1rem;
     font-weight: 700;
     text-decoration: none;
-    text-transform: uppercase;
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s;
     font-family: 'Nunito', sans-serif;
@@ -113,6 +124,7 @@ import LanguageFlags from './LanguageFlags.vue';
       background-color: #ffffff;
       color: #58cc02;
       border-color: #58cc02;
+      text-transform: uppercase;
 
       &:hover {
         background-color: #f5f5f5;

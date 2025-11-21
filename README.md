@@ -23,7 +23,10 @@ A pixel-perfect clone of the Duolingo homepage built with Vue 3 + Nuxt 3, using 
 - **Spacing**: Section padding adjusted to match original proportions
 - **Colors**: Primary green (#58cc02) implemented, Super Duolingo section styling refined
 - **Buttons**: Product section buttons updated to blue (#1cb0f6) with "LEARN MORE" text to match original
-- **Super Duolingo**: Subtitle updated to "AD FREE. UNLIMITED." and button to "LEARN MORE" to match original
+- **Hero Section**: Added subheading "Learn 40+ languages with bite-sized lessons based on science." to match original. Button text updated to "Get started" (not uppercase) to match original
+- **Super Duolingo**: Subtitle updated to "POWER UP WITH", title uses gradient text (green → blue → purple), button text "Try 1 week free" to match original
+- **Feature Sections**: Background color changed from white to light blue (#e8f4f8) to match original
+- **Mobile App Section**: Background color changed from white to light blue (#e8f4f8) to match original
 
 ### 🛠 In Progress
 
@@ -89,4 +92,4 @@ See `progress.md` for detailed progress, known differences, and planned fixes.
 
 ---
 
-**Status**: Core implementation complete with placeholder assets. Super Duolingo and Product sections updated to match original. Typography and spacing refined. Working on illustration replacements, visual refinement, and responsive design.
+**Status**: Core implementation complete with placeholder assets. Hero section subheading and button text case fixed. Feature sections and Mobile App section backgrounds updated to light blue. Super Duolingo section updated with correct subtitle, gradient title, and button text. Typography and spacing refined. Working on illustration replacements, visual refinement, and responsive design.
