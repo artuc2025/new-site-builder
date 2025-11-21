@@ -22,7 +22,7 @@
 
 <style lang="scss" scoped>
 .super-duolingo-section {
-  padding: 6rem 2rem;
+  padding: 4rem 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff;
 
@@ -66,13 +66,10 @@
   }
 
   &__title {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0 0 2rem 0;
-    background: linear-gradient(135deg, #58cc02 0%, #764ba2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #58cc02;
     font-family: 'Nunito', sans-serif;
     text-transform: uppercase;
   }

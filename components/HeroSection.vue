@@ -28,7 +28,7 @@ import LanguageFlags from './LanguageFlags.vue';
 
 <style lang="scss" scoped>
 .hero {
-  padding: 3rem 2rem;
+  padding: 2.5rem 2rem;
   background-color: #ffffff;
   text-align: center;
 
@@ -65,7 +65,7 @@ import LanguageFlags from './LanguageFlags.vue';
   }
 
   &__headline {
-    font-size: 2rem;
+    font-size: 1.875rem;
     font-weight: 700;
     color: #1a1a1a;
     margin: 0 0 2rem 0;

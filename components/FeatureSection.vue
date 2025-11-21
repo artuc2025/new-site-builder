@@ -29,7 +29,7 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="scss" scoped>
 .feature-section {
-  padding: 2.5rem 2rem;
+  padding: 3rem 2rem;
   background-color: #ffffff;
 
   &__container {
@@ -55,7 +55,7 @@ withDefaults(defineProps<Props>(), {
   }
 
   &__title {
-    font-size: 1.75rem;
+    font-size: 1.625rem;
     font-weight: 700;
     color: #58cc02;
     margin: 0 0 1rem 0;

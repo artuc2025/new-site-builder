@@ -48,7 +48,7 @@
 
 <style lang="scss" scoped>
 .mobile-app-section {
-  padding: 3rem 2rem;
+  padding: 3.5rem 2rem;
   background-color: #ffffff;
 
   &__container {
@@ -65,7 +65,7 @@
   }
 
   &__title {
-    font-size: 2rem;
+    font-size: 1.875rem;
     font-weight: 700;
     color: #58cc02;
     margin: 0 0 2rem 0;

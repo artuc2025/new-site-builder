@@ -19,7 +19,7 @@
 
 <style lang="scss" scoped>
 .final-cta-section {
-  padding: 6rem 2rem;
+  padding: 4rem 2rem;
   background-color: #ffffff;
   text-align: center;
 
@@ -29,7 +29,7 @@
   }
 
   &__title {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #1a1a1a;
     margin: 0 0 2rem 0;
