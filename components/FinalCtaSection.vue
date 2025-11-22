@@ -6,9 +6,11 @@
         Get started
       </a>
       <div class="final-cta-section__illustration">
-        <div class="final-cta-section__illustration-placeholder">
-          <!-- Final CTA illustration -->
-        </div>
+        <img 
+          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/890eb76de9a395b182c1c28322721405.svg" 
+          alt="" 
+          class="final-cta-section__image"
+        />
       </div>
     </div>
   </section>
@@ -60,17 +62,14 @@
 
   &__illustration {
     margin-top: 4rem;
+    display: flex;
+    justify-content: center;
   }
 
-  &__illustration-placeholder {
+  &__image {
     width: 100%;
     max-width: 600px;
-    height: 400px;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #58cc02 0%, #89e219 100%);
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
+    height: auto;
   }
 }
 </style>

@@ -35,9 +35,11 @@
         </div>
       </div>
       <div class="mobile-app-section__illustration">
-        <div class="mobile-app-section__illustration-placeholder">
-          <!-- Mobile devices illustration -->
-        </div>
+        <img 
+          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/229d5f88cc9df2eb0b68f39466500911.svg" 
+          alt="Mobile app" 
+          class="mobile-app-section__image"
+        />
       </div>
     </div>
   </section>
@@ -118,14 +120,10 @@
     align-items: center;
   }
 
-  &__illustration-placeholder {
+  &__image {
     width: 100%;
     max-width: 400px;
-    height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
+    height: auto;
   }
 }
 </style>

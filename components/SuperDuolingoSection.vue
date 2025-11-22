@@ -2,9 +2,11 @@
   <section class="super-duolingo-section">
     <div class="super-duolingo-section__container">
       <div class="super-duolingo-section__illustration">
-        <div class="super-duolingo-section__illustration-placeholder">
-          <!-- Super Duolingo phone illustration -->
-        </div>
+        <img 
+          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/22fce01f6df43e0472d7585afad9a43a.svg" 
+          alt="Super Duolingo" 
+          class="super-duolingo-section__image"
+        />
       </div>
       <div class="super-duolingo-section__content">
         <p class="super-duolingo-section__subtitle">POWER UP WITH</p>
@@ -44,15 +46,10 @@
     align-items: center;
   }
 
-  &__illustration-placeholder {
+  &__image {
     width: 100%;
     max-width: 300px;
-    height: 500px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(10px);
+    height: auto;
   }
 
   &__content {

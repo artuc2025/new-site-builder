@@ -6,9 +6,11 @@
         <p class="feature-section__description">{{ description }}</p>
       </div>
       <div class="feature-section__illustration">
-        <div :class="`feature-section__illustration-placeholder feature-section__illustration-placeholder--${illustration}`">
-          <!-- Feature illustration -->
-        </div>
+        <img 
+          :src="illustration" 
+          alt="" 
+          class="feature-section__image"
+        />
       </div>
     </div>
   </section>
@@ -76,29 +78,10 @@ withDefaults(defineProps<Props>(), {
     align-items: center;
   }
 
-  &__illustration-placeholder {
+  &__image {
     width: 100%;
     max-width: 500px;
-    height: 300px;
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
-
-    &--feature-1 {
-      background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
-    }
-
-    &--feature-2 {
-      background: linear-gradient(135deg, #4ecdc4 0%, #6ee5dd 100%);
-    }
-
-    &--feature-3 {
-      background: linear-gradient(135deg, #ffe66d 0%, #fff89a 100%);
-    }
-
-    &--feature-4 {
-      background: linear-gradient(135deg, #a8e6cf 0%, #c4f0db 100%);
-    }
+    height: auto;
   }
 }
 </style>

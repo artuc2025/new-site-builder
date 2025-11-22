@@ -2,9 +2,11 @@
   <section class="hero">
     <div class="hero__container">
       <div class="hero__illustration">
-        <div class="hero__illustration-placeholder">
-          <!-- Main hero illustration with characters -->
-        </div>
+        <img 
+          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/f92d5f2f7d56636846861c458c0d0b6c.svg" 
+          alt="Duolingo characters"
+          class="hero__image"
+        />
       </div>
       <h1 class="hero__headline">
         The free, fun, and effective way to learn a language!
@@ -42,29 +44,14 @@ import LanguageFlags from './LanguageFlags.vue';
 
   &__illustration {
     margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
   }
 
-  &__illustration-placeholder {
+  &__image {
     width: 100%;
     max-width: 600px;
-    height: 400px;
-    margin: 0 auto;
-    background: linear-gradient(135deg, #58cc02 0%, #89e219 100%);
-    border-radius: 16px;
-    position: relative;
-    overflow: hidden;
-
-    &::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 80%;
-      height: 80%;
-      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23ffffff" opacity="0.3"/></svg>');
-      background-size: cover;
-    }
+    height: auto;
   }
 
   &__headline {
