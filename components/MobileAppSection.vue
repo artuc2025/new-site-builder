@@ -1,7 +1,7 @@
 <template>
   <section class="mobile-app-section">
     <div class="mobile-app-section__container">
-      <div class="mobile-app-section__content">
+      <div class="mobile-app-section__content" data-aos="fade-right">
         <h2 class="mobile-app-section__title">learn anytime, anywhere</h2>
         <div class="mobile-app-section__badges">
           <a
@@ -34,7 +34,7 @@
           </a>
         </div>
       </div>
-      <div class="mobile-app-section__illustration">
+      <div class="mobile-app-section__illustration" data-aos="fade-left">
         <img 
           src="/mobile-illustration.png" 
           alt="Duolingo mobile app" 
@@ -60,10 +60,23 @@
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      text-align: center;
+    }
   }
 
   &__content {
     text-align: left;
+
+    @media (max-width: 768px) {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__title {
@@ -79,6 +92,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    
+    @media (max-width: 768px) {
+      align-items: center;
+    }
   }
 
   &__badge {
@@ -87,20 +104,28 @@
     gap: 1rem;
     text-decoration: none;
     color: #333;
-    padding: 1rem;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 0.75rem 1.5rem;
+    background-color: #ffffff;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 14px;
+    transition: filter 0.2s;
+    width: 200px;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      filter: brightness(0.95);
+      border-color: #cecece;
+    }
+    
+    &:active {
+      border-bottom-width: 2px;
+      transform: translateY(2px);
     }
   }
 
   &__badge-img {
-    width: 3rem;
-    height: 3rem;
+    width: 1.8rem;
+    height: 1.8rem;
   }
 
   &__badge-text {
@@ -124,6 +149,20 @@
     width: 100%;
     max-width: 400px;
     height: auto;
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 1s;
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0px);
+    }
   }
 }
 </style>

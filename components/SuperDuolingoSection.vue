@@ -1,14 +1,14 @@
 <template>
   <section class="super-duolingo-section">
     <div class="super-duolingo-section__container">
-      <div class="super-duolingo-section__illustration">
+      <div class="super-duolingo-section__illustration" data-aos="zoom-in">
         <img 
           src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/22fce01f6df43e0472d7585afad9a43a.svg" 
           alt="Super Duolingo" 
           class="super-duolingo-section__image"
         />
       </div>
-      <div class="super-duolingo-section__content">
+      <div class="super-duolingo-section__content" data-aos="fade-up">
         <p class="super-duolingo-section__subtitle">POWER UP WITH</p>
         <h2 class="super-duolingo-section__title">SUPER DUOLINGO</h2>
         <p class="super-duolingo-section__description">
@@ -38,6 +38,12 @@
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      text-align: center;
+    }
   }
 
   &__illustration {
@@ -54,6 +60,13 @@
 
   &__content {
     text-align: left;
+
+    @media (max-width: 768px) {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__subtitle {
@@ -94,12 +107,18 @@
     font-size: 1rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s, filter 0.2s;
     font-family: 'Nunito', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
 
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      filter: brightness(0.95);
+    }
+    
+    &:active {
+      transform: translateY(0);
     }
   }
 }

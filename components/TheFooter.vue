@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" data-aos="fade-in">
     <div class="footer__container">
       <div class="footer__columns">
         <div class="footer__column">
@@ -100,6 +100,10 @@ const siteLanguages = [
   padding: 4rem 2rem 2rem;
   background-color: #f5f5f5;
   border-top: 1px solid #e0e0e0;
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
 
   &__container {
     max-width: 1200px;

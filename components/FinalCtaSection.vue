@@ -1,11 +1,11 @@
 <template>
   <section class="final-cta-section">
     <div class="final-cta-section__container">
-      <h2 class="final-cta-section__title">learn a language with duolingo</h2>
-      <a href="/register" class="final-cta-section__cta">
+      <h2 class="final-cta-section__title" data-aos="fade-up">learn a language with duolingo</h2>
+      <a href="/register" class="final-cta-section__cta" data-aos="zoom-in" data-aos-delay="100">
         Get started
       </a>
-      <div class="final-cta-section__illustration">
+      <div class="final-cta-section__illustration" data-aos="fade-up" data-aos-delay="200">
         <img 
           src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/890eb76de9a395b182c1c28322721405.svg" 
           alt="" 

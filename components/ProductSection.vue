@@ -1,14 +1,14 @@
 <template>
   <section class="product-section">
     <div class="product-section__container" :class="`product-section__container--${reverse ? 'reverse' : 'normal'}`">
-      <div class="product-section__content">
+      <div class="product-section__content" :data-aos="reverse ? 'fade-left' : 'fade-right'">
         <h2 class="product-section__title">{{ title }}</h2>
         <p class="product-section__description">{{ description }}</p>
         <a :href="ctaUrl" class="product-section__cta">
           {{ ctaText }}
         </a>
       </div>
-      <div class="product-section__illustration">
+      <div class="product-section__illustration" :data-aos="reverse ? 'fade-right' : 'fade-left'">
         <img 
           :src="illustration" 
           alt="" 
@@ -48,10 +48,20 @@ withDefaults(defineProps<Props>(), {
     gap: 4rem;
     align-items: center;
 
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      text-align: center;
+    }
+
     &--reverse {
       direction: rtl;
 
       > * {
+        direction: ltr;
+      }
+
+      @media (max-width: 768px) {
         direction: ltr;
       }
     }
@@ -59,6 +69,13 @@ withDefaults(defineProps<Props>(), {
 
   &__content {
     text-align: left;
+
+    @media (max-width: 768px) {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   }
 
   &__title {
@@ -79,21 +96,29 @@ withDefaults(defineProps<Props>(), {
 
   &__cta {
     display: inline-block;
-    padding: 1rem 2rem;
-    background-color: #1cb0f6;
-    color: #ffffff;
-    border: none;
-    border-radius: 16px;
-    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #ffffff;
+    color: #58cc02;
+    border: 2px solid #e5e5e5;
+    border-bottom-width: 4px;
+    border-radius: 12px;
+    font-size: 0.9375rem;
     font-weight: 700;
+    text-transform: uppercase;
     text-decoration: none;
-    transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
+    transition: filter 0.2s;
     font-family: 'Nunito', sans-serif;
+    letter-spacing: 0.8px;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      background-color: #0a9dd6;
+      filter: brightness(0.95);
+      background-color: #e5e5e5;
+      border-color: #cecece;
+    }
+    
+    &:active {
+      border-bottom-width: 2px;
+      transform: translateY(2px);
     }
   }
 

@@ -1,11 +1,11 @@
 <template>
   <section class="feature-section">
     <div class="feature-section__container" :class="`feature-section__container--${reverse ? 'reverse' : 'normal'}`">
-      <div class="feature-section__content">
+      <div class="feature-section__content" :data-aos="reverse ? 'fade-left' : 'fade-right'">
         <h2 class="feature-section__title">{{ title }}</h2>
         <p class="feature-section__description">{{ description }}</p>
       </div>
-      <div class="feature-section__illustration">
+      <div class="feature-section__illustration" :data-aos="reverse ? 'fade-right' : 'fade-left'">
         <img 
           :src="illustration" 
           alt="" 
@@ -42,10 +42,19 @@ withDefaults(defineProps<Props>(), {
     gap: 4rem;
     align-items: center;
 
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
     &--reverse {
       direction: rtl;
 
       > * {
+        direction: ltr;
+      }
+
+      @media (max-width: 768px) {
         direction: ltr;
       }
     }
@@ -54,6 +63,11 @@ withDefaults(defineProps<Props>(), {
   &__content {
     display: flex;
     flex-direction: column;
+
+    @media (max-width: 768px) {
+      align-items: center;
+      text-align: center;
+    }
   }
 
   &__title {

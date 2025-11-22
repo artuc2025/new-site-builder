@@ -6,26 +6,28 @@ A pixel-perfect clone of the Duolingo homepage built with Vue 3 + Nuxt 3, using 
 
 ### ✅ Completed
 
+- **Responsive Design**: Fully optimized for mobile (390px+) and desktop (1200px+).
 - **Component Structure**: All major sections have been created as Vue components.
 - **Assets**: 
-  - High-quality screenshots used for complex illustrations (Hero Globe, Mobile Phone) to match visual fidelity.
+  - High-quality screenshots used for complex illustrations (Hero Globe, Mobile Phone).
   - SVG icons for features and flags.
 - **Styling**: SCSS with BEM methodology implemented.
-- **Hero Section**: Complete with main illustration and correct typography.
-- **Mobile App Section**: Complete with phone illustration (text removed from asset to avoid duplication).
+- **Hero Section**: Complete with floating animation and responsive layout.
+- **Mobile App Section**: Complete with floating animation.
 - **Super Duolingo**: Gradient background and text matched.
 - **Feature & Product Sections**: Full parity with original.
+- **Header & Footer**: Responsive, with mobile-specific adjustments (Hamburger menu).
+- **Interactivity**: Hover effects and floating animations.
 
 ### 🛠 In Progress
 
-- **Responsive Design**: Adding breakpoints for mobile/tablet adaptation.
-- **Typography Refinement**: Fine-tuning weights and spacing.
+- **Mobile Menu Logic**: Making the hamburger menu functional.
+- **Entrance Animations**: Elements appearing on scroll.
 
 ### 📋 Next Steps
 
-1. Implement responsive design (stacking layouts on mobile).
-2. Fine-tune typography.
-3. Add hover animations and transitions.
+1. Implement the mobile menu drawer.
+2. Add scroll-based entrance animations.
 
 ## Project Structure
 
@@ -33,10 +35,10 @@ A pixel-perfect clone of the Duolingo homepage built with Vue 3 + Nuxt 3, using 
 ├── app/
 │   └── app.vue              # Main app component
 ├── components/
-│   ├── TheHeader.vue        # Header
-│   ├── HeroSection.vue      # Hero (Updated with new asset)
-│   ├── FeatureSection.vue   # Features
-│   ├── MobileAppSection.vue # Mobile App (Updated with new asset)
+│   ├── TheHeader.vue        # Header (Responsive + Hamburger)
+│   ├── HeroSection.vue      # Hero (Floating Anim)
+│   ├── FeatureSection.vue   # Features (Responsive)
+│   ├── MobileAppSection.vue # Mobile App (Floating Anim)
 │   ├── SuperDuolingoSection.vue
 │   ├── ProductSection.vue
 │   ├── FinalCtaSection.vue

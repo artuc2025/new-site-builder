@@ -1,66 +1,60 @@
 # Duolingo Website Clone - Progress Tracker
 
-## Current Status: Iteration 16 - Illustrations Integration (Complete)
+## Current Status: Iteration 20 - Full Entrance Animations & Mobile Polish (Complete)
 
 ### ✅ Completed Components
 
-1. **Hero Section** (`HeroSection.vue`)
-   - "The free, fun, and effective way to learn a language!" headline ✅
-   - "Get started" & "I ALREADY HAVE AN ACCOUNT" buttons ✅
-   - **Illustration:** Updated with high-quality screenshot of the globe composition (`hero-illustration.png`). ✅ (Matched)
+1.  **Hero Section** (`HeroSection.vue`)
+    *   **Animations:** Floating image + Fade-up text/buttons (AOS). ✅
+    *   **Layout:** Mobile-responsive column stacking. ✅
 
-2. **Mobile App Section** (`MobileAppSection.vue`)
-   - "learn anytime, anywhere" headline ✅
-   - App Store & Google Play badges ✅
-   - **Illustration:** Updated with clean screenshot of the phone composition (`mobile-illustration.png`). ✅ (Matched)
+2.  **Feature Sections** (`FeatureSection.vue`, `MobileAppSection.vue`)
+    *   **Animations:** Directional slides (fade-left/fade-right) based on layout direction. ✅
+    *   **Layout:** Zig-zag layout preserved on desktop, stacked on mobile. ✅
 
-3. **Feature Sections** (`FeatureSection.vue`)
-   - All feature sections matched with correct illustrations and layout. ✅
+3.  **Product & CTA Sections** (`ProductSection.vue`, `FinalCtaSection.vue`)
+    *   **Animations:** Added fade and zoom entrance effects to all product cards and final CTA. ✅
+    *   **Consistency:** Unified button styles and typography. ✅
 
-4. **Super Duolingo Section** (`SuperDuolingoSection.vue`)
-   - "POWER UP WITH SUPER DUOLINGO" ✅
-   - Gradient text and background ✅
+4.  **Super Duolingo Section** (`SuperDuolingoSection.vue`)
+    *   **Animations:** Zoom-in illustration + Fade-up content. ✅
 
-5. **Product Sections** (`ProductSection.vue`)
-   - All product cards matched. ✅
+5.  **Header & Navigation** (`TheHeader.vue`)
+    *   **Mobile Menu:** Fully functional slide-out drawer. ✅
+    *   **Sticky:** Header sticks on scroll. ✅
 
-6. **Final CTA Section** (`FinalCtaSection.vue`)
-   - Matched. ✅
+6.  **Footer** (`TheFooter.vue`)
+    *   **Animations:** Fade-in entrance. ✅
+    *   **Layout:** Responsive grid (stacks on mobile). ✅
+    *   **Spacing:** Adjusted mobile padding for better containment. ✅
 
 ### ❌ Known Differences from Original
 
-1. **Typography & Spacing**
-   - Font weights and exact kerning might slightly differ from the proprietary Nunito font settings used by Duolingo.
-   - Spacing between sections is approximated.
+1.  **Animations**
+    *   Entrance animations are standard CSS transitions (AOS) rather than custom Lottie/JS driven sequences found on the real site.
+    *   "Float" animations are CSS approximations.
 
-2. **Animations**
-   - The original site uses Lottie animations (moving characters). The clone uses static PNG screenshots for the complex illustrations.
-   - Hover effects on buttons are implemented but might need fine-tuning to match exact ease/duration.
-
-3. **Responsive Design**
-   - Currently optimized for Desktop (1200px+).
-   - Mobile/Tablet views need specific media queries.
+2.  **Visuals**
+    *   Gradients and exact illustration assets are placeholders/approximations (using available SVGs).
+    *   DevTools overlay visible in screenshots.
 
 ### 🛠 Planned Fixes for Next Iteration
 
-1. **Responsive Design:**
-   - Implement media queries for mobile (stacking columns).
-   - Adjust font sizes for smaller screens.
-
-2. **Typography Refinement:**
-   - Further tune line-heights and letter-spacing.
+1.  **Refinement:** based on user feedback.
+2.  **Dark Mode:** (Optional)
 
 ### 📸 Screenshots Comparison
 
-- **Original:** `.playwright-mcp/original-duolingo-latest.png`
-- **Current:** `.playwright-mcp/current-implementation-v16.png`
+*   **Original:** `.playwright-mcp/original-duolingo-mobile.png`
+*   **Current Footer:** `.playwright-mcp/current-implementation-footer-v5.png`
+*   **Current Mobile:** `.playwright-mcp/current-implementation-mobile-v4.png`
 
-### 🔍 Visual Comparison Results (v16)
+### 🔍 Visual Comparison Results (v20)
 
 #### ✅ What's Working Well
-- **Illustrations:** The previously missing Hero Globe and Mobile Phone are now present and visually accurate (static).
-- **Layout:** The overall structure matches the original pixel-perfectly on desktop.
-- **Colors:** Brand colors (Green, Blue, Super Gradient) are accurate.
+*   **Interactivity:** The site feels "alive" with entrance animations as you scroll down.
+*   **Navigation:** Mobile drawer provides access to all links.
+*   **Responsiveness:** All sections stack and scale correctly on small screens.
 
 #### ❌ Remaining Issues
-- **Interactivity:** Static images lack the life of the original Lottie animations.
+*   None critical. Ready for review.
