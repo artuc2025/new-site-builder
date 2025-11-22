@@ -79,12 +79,13 @@ withDefaults(defineProps<Props>(), {
   }
 
   &__title {
-    font-size: 1.75rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
     color: #58cc02;
     margin: 0 0 1rem 0;
     text-transform: lowercase;
     font-family: 'Nunito', sans-serif;
+    line-height: 1.1;
   }
 
   &__description {
@@ -96,29 +97,30 @@ withDefaults(defineProps<Props>(), {
 
   &__cta {
     display: inline-block;
-    padding: 0.75rem 1.5rem;
-    background-color: #ffffff;
-    color: #58cc02;
-    border: 2px solid #e5e5e5;
-    border-bottom-width: 4px;
-    border-radius: 12px;
-    font-size: 0.9375rem;
+    padding: 1rem 2.5rem;
+    background-color: #58cc02;
+    color: #ffffff;
+    border: 2px solid #58cc02;
+    border-radius: 16px;
+    font-size: 1rem;
     font-weight: 700;
     text-transform: uppercase;
     text-decoration: none;
-    transition: filter 0.2s;
+    transition: transform 0.1s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.1s, background-color 0.1s;
     font-family: 'Nunito', sans-serif;
     letter-spacing: 0.8px;
+    box-shadow: 0 4px 0 #46a302;
 
     &:hover {
-      filter: brightness(0.95);
-      background-color: #e5e5e5;
-      border-color: #cecece;
+      background-color: #61e002;
+      box-shadow: 0 4px 0 #46a302;
+      transform: translateY(0);
+      filter: brightness(1.1);
     }
     
     &:active {
-      border-bottom-width: 2px;
-      transform: translateY(2px);
+      box-shadow: none;
+      transform: translateY(4px);
     }
   }
 

@@ -32,7 +32,7 @@ withDefaults(defineProps<Props>(), {
 <style lang="scss" scoped>
 .feature-section {
   padding: 3rem 2rem;
-  background-color: #e8f4f8;
+  background-color: #ffffff;
 
   &__container {
     max-width: 1200px;

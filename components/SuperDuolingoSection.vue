@@ -9,12 +9,13 @@
         />
       </div>
       <div class="super-duolingo-section__content" data-aos="fade-up">
+        <h3 class="super-duolingo-section__subtitle">POWER UP WITH</h3>
         <h2 class="super-duolingo-section__title">SUPER DUOLINGO</h2>
         <p class="super-duolingo-section__description">
           Ad-free learning, unlimited Hearts, and more!
         </p>
         <button class="super-duolingo-section__cta">
-          Try 1 week free
+          LEARN MORE
         </button>
       </div>
     </div>
@@ -85,6 +86,17 @@
       text-align: center;
       align-items: center;
     }
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    font-family: 'Nunito', sans-serif;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0.9;
   }
 
   &__title {

@@ -51,7 +51,7 @@
 <style lang="scss" scoped>
 .mobile-app-section {
   padding: 3.5rem 2rem;
-  background-color: #e8f4f8;
+  background-color: #ffffff;
 
   &__container {
     max-width: 1200px;
