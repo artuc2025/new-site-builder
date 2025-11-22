@@ -3,8 +3,8 @@
     <div class="hero__container">
       <div class="hero__illustration">
         <img 
-          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/f92d5f2f7d56636846861c458c0d0b6c.svg" 
-          alt="Duolingo characters"
+          src="/hero-illustration.png" 
+          alt="Duolingo language learning community"
           class="hero__image"
         />
       </div>

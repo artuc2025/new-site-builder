@@ -36,8 +36,8 @@
       </div>
       <div class="mobile-app-section__illustration">
         <img 
-          src="https://d35aaqx5ub95lt.cloudfront.net/images/splash/lottie/229d5f88cc9df2eb0b68f39466500911.svg" 
-          alt="Mobile app" 
+          src="/mobile-illustration.png" 
+          alt="Duolingo mobile app" 
           class="mobile-app-section__image"
         />
       </div>

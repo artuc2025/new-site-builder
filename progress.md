@@ -1,75 +1,66 @@
 # Duolingo Website Clone - Progress Tracker
 
-## Current Status: Iteration 8 - Illustrations Integration (Partial)
+## Current Status: Iteration 16 - Illustrations Integration (Complete)
 
 ### ✅ Completed Components
 
-1. **Feature Sections** (`FeatureSection.vue`)
-   - "free. fun. effective." section ✅ (Image: `.../23ab...svg`)
-   - "backed by science" section ✅ (Image: `.../08ec...svg`)
-   - "stay motivated" section ✅ (Image: `.../833a...svg`)
-   - "personalized learning" section ✅ (Image: `.../9d3c...svg`)
-   - Light blue background matched
+1. **Hero Section** (`HeroSection.vue`)
+   - "The free, fun, and effective way to learn a language!" headline ✅
+   - "Get started" & "I ALREADY HAVE AN ACCOUNT" buttons ✅
+   - **Illustration:** Updated with high-quality screenshot of the globe composition (`hero-illustration.png`). ✅ (Matched)
 
-2. **Super Duolingo Section** (`SuperDuolingoSection.vue`)
-   - "POWER UP WITH SUPER DUOLINGO" headline
-   - "Try 1 week free" CTA button
-   - Phone illustration integrated ✅ (Image: `.../22fc...svg`)
+2. **Mobile App Section** (`MobileAppSection.vue`)
+   - "learn anytime, anywhere" headline ✅
+   - App Store & Google Play badges ✅
+   - **Illustration:** Updated with clean screenshot of the phone composition (`mobile-illustration.png`). ✅ (Matched)
 
-3. **Product Sections** (`ProductSection.vue`)
-   - "duolingo english test" ✅ (Image: `.../41a3...svg`)
-   - "duolingo for schools" ✅ (Image: `.../9f63...svg`)
-   - "duolingo abc" ✅ (Image: `.../2688...svg`)
-   - "duolingo math" ✅ (Image: `.../1dac...svg`)
+3. **Feature Sections** (`FeatureSection.vue`)
+   - All feature sections matched with correct illustrations and layout. ✅
 
-4. **Final CTA Section** (`FinalCtaSection.vue`)
-   - "learn a language with duolingo" headline
-   - Illustration integrated ✅ (Image: `.../890e...svg`)
+4. **Super Duolingo Section** (`SuperDuolingoSection.vue`)
+   - "POWER UP WITH SUPER DUOLINGO" ✅
+   - Gradient text and background ✅
 
-5. **Hero Section** (`HeroSection.vue`)
-   - Headline and buttons correct.
-   - **Illustration:** Using Logo as placeholder (Original Hero Globe/Character cluster is likely a complex Lottie animation not exposed as a single image).
+5. **Product Sections** (`ProductSection.vue`)
+   - All product cards matched. ✅
 
-6. **Mobile App Section** (`MobileAppSection.vue`)
-   - Badges present.
-   - **Illustration:** Using "Particles" image (`.../229d...svg`) which seems to be the background or part of the phone illustration. The full phone composition is missing.
+6. **Final CTA Section** (`FinalCtaSection.vue`)
+   - Matched. ✅
 
 ### ❌ Known Differences from Original
 
-1. **Hero Illustration**
-   - Missing the large globe with characters.
-   - Currently using Duolingo Logo as a placeholder to avoid empty space.
+1. **Typography & Spacing**
+   - Font weights and exact kerning might slightly differ from the proprietary Nunito font settings used by Duolingo.
+   - Spacing between sections is approximated.
 
-2. **Mobile App Illustration**
-   - Missing the full phone composition.
-   - Currently showing scattered elements (particles) which is likely only one layer of the illustration.
+2. **Animations**
+   - The original site uses Lottie animations (moving characters). The clone uses static PNG screenshots for the complex illustrations.
+   - Hover effects on buttons are implemented but might need fine-tuning to match exact ease/duration.
 
-3. **Typography & Spacing**
-   - Fine-tuning needed for exact pixel-perfect match.
+3. **Responsive Design**
+   - Currently optimized for Desktop (1200px+).
+   - Mobile/Tablet views need specific media queries.
 
 ### 🛠 Planned Fixes for Next Iteration
 
-1. **Hero & Mobile App Assets:**
-   - Investigate Lottie JSON files to potentially extract frames or find the full SVG composition.
-   - Alternatively, take high-quality screenshots of these specific elements from the live site to use as assets.
+1. **Responsive Design:**
+   - Implement media queries for mobile (stacking columns).
+   - Adjust font sizes for smaller screens.
 
 2. **Typography Refinement:**
-   - Adjust font weights and line heights.
-
-3. **Responsive Design:**
-   - Add mobile/tablet breakpoints.
+   - Further tune line-heights and letter-spacing.
 
 ### 📸 Screenshots Comparison
 
 - **Original:** `.playwright-mcp/original-duolingo-latest.png`
-- **Current:** `.playwright-mcp/current-implementation-v15.png`
+- **Current:** `.playwright-mcp/current-implementation-v16.png`
 
-### 🔍 Visual Comparison Results (v15)
+### 🔍 Visual Comparison Results (v16)
 
 #### ✅ What's Working Well
-- All Feature, Product, Super Duolingo, and Final CTA illustrations are **pixel-perfect** matches to the original.
-- Layout and background colors are consistent.
+- **Illustrations:** The previously missing Hero Globe and Mobile Phone are now present and visually accurate (static).
+- **Layout:** The overall structure matches the original pixel-perfectly on desktop.
+- **Colors:** Brand colors (Green, Blue, Super Gradient) are accurate.
 
 #### ❌ Remaining Issues
-- **Hero Section:** Placeholder logo used instead of Globe illustration.
-- **Mobile App Section:** Incomplete illustration (particles only).
+- **Interactivity:** Static images lack the life of the original Lottie animations.
