@@ -1,60 +1,43 @@
 # Duolingo Website Clone - Progress Tracker
 
-## Current Status: Iteration 20 - Full Entrance Animations & Mobile Polish (Complete)
+## Current Status: Iteration 22 - Visual Refinement (Complete)
 
 ### ✅ Completed Components
 
 1.  **Hero Section** (`HeroSection.vue`)
+    *   **Refinement:** Increased headline weight to 800 (Extra Bold). ✅
     *   **Animations:** Floating image + Fade-up text/buttons (AOS). ✅
-    *   **Layout:** Mobile-responsive column stacking. ✅
 
 2.  **Feature Sections** (`FeatureSection.vue`, `MobileAppSection.vue`)
-    *   **Animations:** Directional slides (fade-left/fade-right) based on layout direction. ✅
-    *   **Layout:** Zig-zag layout preserved on desktop, stacked on mobile. ✅
+    *   **Refinement:** Increased section titles to `3rem` and weight 800 to match original "chunky" style. ✅
+    *   **Refinement:** "Mobile App" section badges aligned to row on desktop. ✅
+    *   **Layout:** Zig-zag layout preserved. ✅
 
-3.  **Product & CTA Sections** (`ProductSection.vue`, `FinalCtaSection.vue`)
-    *   **Animations:** Added fade and zoom entrance effects to all product cards and final CTA. ✅
-    *   **Consistency:** Unified button styles and typography. ✅
+3.  **Super Duolingo Section** (`SuperDuolingoSection.vue`)
+    *   **Refinement:** Updated background to deep navy (`#101935`). ✅
+    *   **Refinement:** Added "iridescent" text effect and glow. ✅
+    *   **Refinement:** Button styled with 3D white effect. ✅
 
-4.  **Super Duolingo Section** (`SuperDuolingoSection.vue`)
-    *   **Animations:** Zoom-in illustration + Fade-up content. ✅
+4.  **Header & Navigation** (`TheHeader.vue`)
+    *   **Status:** Functional and responsive.
 
-5.  **Header & Navigation** (`TheHeader.vue`)
-    *   **Mobile Menu:** Fully functional slide-out drawer. ✅
-    *   **Sticky:** Header sticks on scroll. ✅
-
-6.  **Footer** (`TheFooter.vue`)
-    *   **Animations:** Fade-in entrance. ✅
-    *   **Layout:** Responsive grid (stacks on mobile). ✅
-    *   **Spacing:** Adjusted mobile padding for better containment. ✅
+5.  **Footer** (`TheFooter.vue`)
+    *   **Status:** Functional and responsive.
 
 ### ❌ Known Differences from Original
 
-1.  **Animations**
-    *   Entrance animations are standard CSS transitions (AOS) rather than custom Lottie/JS driven sequences found on the real site.
-    *   "Float" animations are CSS approximations.
-
-2.  **Visuals**
-    *   Gradients and exact illustration assets are placeholders/approximations (using available SVGs).
-    *   DevTools overlay visible in screenshots.
+1.  **Visuals**
+    *   **Illustrations:** Using placeholder SVGs/PNGs. The exact Duolingo vector art is proprietary and changes often.
+    *   **Button Icons:** Some buttons on original (like "App Store") have specific SVG logos which we are approximating.
 
 ### 🛠 Planned Fixes for Next Iteration
 
-1.  **Refinement:** based on user feedback.
-2.  **Dark Mode:** (Optional)
+1.  **Dark Mode Support:** (Optional/Next Step)
+    *   Implement a global theme toggle.
+    *   Define dark mode color palette (Navy/Black/Grey).
+    *   Update SCSS variables for theming.
 
 ### 📸 Screenshots Comparison
 
-*   **Original:** `.playwright-mcp/original-duolingo-mobile.png`
-*   **Current Footer:** `.playwright-mcp/current-implementation-footer-v5.png`
-*   **Current Mobile:** `.playwright-mcp/current-implementation-mobile-v4.png`
-
-### 🔍 Visual Comparison Results (v20)
-
-#### ✅ What's Working Well
-*   **Interactivity:** The site feels "alive" with entrance animations as you scroll down.
-*   **Navigation:** Mobile drawer provides access to all links.
-*   **Responsiveness:** All sections stack and scale correctly on small screens.
-
-#### ❌ Remaining Issues
-*   None critical. Ready for review.
+*   **Original:** `.playwright-mcp/.playwright-mcp/original-desktop.png`
+*   **Current:** `.playwright-mcp/.playwright-mcp/local-desktop-v2.png`

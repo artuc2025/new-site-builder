@@ -9,7 +9,6 @@
         />
       </div>
       <div class="super-duolingo-section__content" data-aos="fade-up">
-        <p class="super-duolingo-section__subtitle">POWER UP WITH</p>
         <h2 class="super-duolingo-section__title">SUPER DUOLINGO</h2>
         <p class="super-duolingo-section__description">
           Ad-free learning, unlimited Hearts, and more!
@@ -27,21 +26,38 @@
 
 <style lang="scss" scoped>
 .super-duolingo-section {
-  padding: 4rem 2rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 5rem 2rem;
+  background-color: #101935;
   color: #ffffff;
+  overflow: hidden;
+  position: relative;
+
+  // Add a subtle glow effect in the background
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, rgba(45, 55, 100, 0.4) 0%, transparent 70%);
+    pointer-events: none;
+  }
 
   &__container {
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
+    position: relative;
+    z-index: 1;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       grid-template-columns: 1fr;
-      gap: 3rem;
+      gap: 2rem;
       text-align: center;
     }
   }
@@ -54,71 +70,92 @@
 
   &__image {
     width: 100%;
-    max-width: 300px;
+    max-width: 400px;
     height: auto;
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
   }
 
   &__content {
     text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
       text-align: center;
-      display: flex;
-      flex-direction: column;
       align-items: center;
     }
   }
 
-  &__subtitle {
-    font-size: 0.875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin: 0 0 1rem 0;
-    opacity: 0.9;
-  }
-
   &__title {
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 3.5rem;
+    font-weight: 800;
     margin: 0 0 1rem 0;
-    background: linear-gradient(135deg, #58cc02 0%, #1cb0f6 50%, #764ba2 100%);
+    font-family: 'Nunito', sans-serif; // Should be Feather Bold ideally
+    color: #ffffff;
+    text-shadow: 0 0 30px rgba(100, 200, 255, 0.3);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    
+    // Attempting the iridescent effect
+    background: linear-gradient(to right, #ff4b4b, #ff9600, #fff, #4b96ff, #c800ff);
+    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    font-family: 'Nunito', sans-serif;
-    text-transform: uppercase;
+    animation: shine 5s linear infinite;
+  }
+
+  @keyframes shine {
+    to {
+      background-position: 200% center;
+    }
   }
 
   &__description {
-    font-size: 1rem;
-    font-weight: 400;
-    margin: 0 0 2rem 0;
-    line-height: 1.5;
-    opacity: 0.95;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 2.5rem 0;
+    line-height: 1.4;
+    opacity: 0.9;
+    max-width: 400px;
+    
+    @media (max-width: 900px) {
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 
   &__cta {
-    padding: 1rem 2.5rem;
+    padding: 1rem 2rem;
     background-color: #ffffff;
-    color: #1a1a1a;
-    border: none;
+    color: #101935;
+    border: 2px solid #ffffff;
     border-radius: 16px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
-    transition: transform 0.2s, filter 0.2s;
+    transition: all 0.1s;
     font-family: 'Nunito', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    width: fit-content;
+    box-shadow: 0 4px 0 #d2d2d2;
+
+    @media (max-width: 900px) {
+      width: 100%;
+      max-width: 300px;
+    }
 
     &:hover {
-      transform: translateY(-2px);
       filter: brightness(0.95);
+      transform: translateY(1px);
+      box-shadow: 0 3px 0 #d2d2d2;
     }
     
     &:active {
-      transform: translateY(0);
+      transform: translateY(4px);
+      box-shadow: none;
     }
   }
 }

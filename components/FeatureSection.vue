@@ -71,12 +71,13 @@ withDefaults(defineProps<Props>(), {
   }
 
   &__title {
-    font-size: 1.625rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
     color: #58cc02;
     margin: 0 0 1rem 0;
     text-transform: lowercase;
     font-family: 'Nunito', sans-serif;
+    line-height: 1.1;
   }
 
   &__description {

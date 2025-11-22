@@ -80,20 +80,22 @@
   }
 
   &__title {
-    font-size: 1.875rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 800;
     color: #58cc02;
     margin: 0 0 2rem 0;
     text-transform: lowercase;
     font-family: 'Nunito', sans-serif;
+    line-height: 1.1;
   }
 
   &__badges {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
     
     @media (max-width: 768px) {
+      flex-direction: column;
       align-items: center;
     }
   }

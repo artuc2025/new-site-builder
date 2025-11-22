@@ -69,7 +69,7 @@ import LanguageFlags from './LanguageFlags.vue';
 
   &__headline {
     font-size: 1.875rem;
-    font-weight: 700;
+    font-weight: 800;
     color: #1a1a1a;
     margin: 0 0 1rem 0;
     line-height: 1.3;
